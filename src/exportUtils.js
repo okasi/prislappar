@@ -1,6 +1,16 @@
 import html2canvas from 'html2canvas';
 
 /**
+ * Resolve html2canvas from window (CDN) or module import
+ */
+function getHtml2Canvas() {
+  if (typeof window !== 'undefined' && window.html2canvas) {
+    return window.html2canvas;
+  }
+  return html2canvas;
+}
+
+/**
  * Triggers standard browser print dialog for the A4 sheet.
  */
 export function printSheet() {
@@ -28,8 +38,9 @@ export async function exportSingleCard(cardIndex = 0, filename = 'prislapp.png')
     throw new Error(`Card #${cardIndex + 1} not found`);
   }
 
+  const h2c = getHtml2Canvas();
   // Clone or capture directly with html2canvas at scale 3 for print sharpness
-  const canvas = await html2canvas(cardElement, {
+  const canvas = await h2c(cardElement, {
     scale: 3.5, // Crisp 300+ DPI
     useCORS: true,
     allowTaint: true,
@@ -43,7 +54,7 @@ export async function exportSingleCard(cardIndex = 0, filename = 'prislapp.png')
 }
 
 /**
- * Export the whole A4 sheet as a high-resolution PNG.
+ * Export the full A4 Sheet (all price tags & layout) as high-res PNG.
  */
 export async function exportFullSheet(filename = 'A4-prislappar.png') {
   const sheetElement = document.getElementById('a4-sheet');
@@ -51,8 +62,9 @@ export async function exportFullSheet(filename = 'A4-prislappar.png') {
     throw new Error('A4 Sheet element not found');
   }
 
+  const h2c = getHtml2Canvas();
   // Capture whole A4 sheet at high resolution (scale 2.5 ~ 2500x3500px)
-  const canvas = await html2canvas(sheetElement, {
+  const canvas = await h2c(sheetElement, {
     scale: 2.5,
     useCORS: true,
     allowTaint: true,

@@ -1,7 +1,7 @@
 {
-  "name": "butcher-price-tag-generator",
+  "name": "prislappar",
   "version": "1.0.0",
-  "description": "A4 Deli & Butcher Price Tag Template Generator",
+  "description": "Prislappar - A4 Butik & Chark Prislappsgenerator",
   "type": "module",
   "scripts": {
     "dev": "vite",

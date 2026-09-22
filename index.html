@@ -3,9 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-  <title>A4 Prislappsgenerator | Butik & Chark</title>
+  <title>Prislappar</title>
   <link rel="stylesheet" href="./src/style.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏷️</text></svg>">
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script type="importmap">
+    {
+      "imports": {
+        "html2canvas": "https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/+esm"
+      }
+    }
+  </script>
 </head>
 <body>
   <div id="app-container" class="view-editor">
@@ -29,7 +37,7 @@
       <header id="sidebar-header">
         <div class="brand-title">
           <span class="brand-icon">🥩</span>
-          <span id="txt-brand-title" data-i18n="brandTitle">CHARK PRISLAPPAR</span>
+          <span id="txt-brand-title" data-i18n="brandTitle">PRISLAPPAR</span>
         </div>
         <div class="lang-switch-pills" id="lang-switch-container">
           <button type="button" class="lang-pill-btn active" data-lang="sv" title="Svenska">🇸🇪 SV</button>

@@ -1,4 +1,4 @@
-# A4 Prislappsgenerator (Deli & Butcher Price Tag Template)
+# Prislappar
 
 En modern, webbaserad generator för butiks- och charkprislappar anpassad för **A4-ark (210 × 297 mm)**. Skapad med inspiration från [timemark-replica](https://github.com/okasi/timemark-replica), med ett elegant mörkt glassmorphism-gränssnitt och en exakt visuell återskapning av den laminerade charkskylten (t.ex. *Kalvframdel Litauen 69:90/kg*).
 

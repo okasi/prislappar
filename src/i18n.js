@@ -5,7 +5,7 @@
 export const TRANSLATIONS = {
   sv: {
     // Header & App Brand
-    brandTitle: 'CHARK PRISLAPPAR',
+    brandTitle: 'PRISLAPPAR',
     brandTag: 'A4 MALL',
     langSelectorLabel: 'Språk',
 
@@ -130,7 +130,7 @@ export const TRANSLATIONS = {
 
   tr: {
     // Header & App Brand
-    brandTitle: 'ŞARKÜTERİ ETİKETLERİ',
+    brandTitle: 'PRISLAPPAR',
     brandTag: 'A4 ŞABLONU',
     langSelectorLabel: 'Dil',
 
@@ -255,7 +255,7 @@ export const TRANSLATIONS = {
 
   en: {
     // Header & App Brand
-    brandTitle: 'DELI PRICE TAGS',
+    brandTitle: 'PRISLAPPAR',
     brandTag: 'A4 TEMPLATE',
     langSelectorLabel: 'Language',
 
