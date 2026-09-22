@@ -882,6 +882,7 @@ function setLanguage(lang) {
   // Re-render slot pills and sheet for localized empty slot text and indicators
   renderSlotPills();
   renderSheet();
+  syncUrlParam();
 }
 
 /**
