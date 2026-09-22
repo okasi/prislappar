@@ -1517,18 +1517,21 @@ select:focus {
 
 @media print {
   html, body {
+    width: 210mm !important;
+    height: 297mm !important;
+    max-height: 297mm !important;
     margin: 0 !important;
     padding: 0 !important;
     background: transparent !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
     color-adjust: exact !important;
-    overflow: visible !important;
-    height: auto !important;
+    overflow: hidden !important;
   }
 
   #app-sidebar,
   #stage-toolbar,
+  #mobile-view-nav,
   .card-slot-badge,
   .no-print {
     display: none !important;
@@ -1536,22 +1539,33 @@ select:focus {
 
   #app-container {
     display: block !important;
-    height: auto !important;
+    width: 210mm !important;
+    height: 297mm !important;
+    max-height: 297mm !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
   }
 
   #viewport-stage {
     padding: 0 !important;
     margin: 0 !important;
     background: none !important;
-    overflow: visible !important;
+    overflow: hidden !important;
     display: block !important;
-    height: auto !important;
+    width: 210mm !important;
+    height: 297mm !important;
+    max-height: 297mm !important;
   }
 
   #a4-sheet-wrapper {
     transform: none !important;
     margin: 0 !important;
     padding: 0 !important;
+    width: 210mm !important;
+    height: 297mm !important;
+    max-height: 297mm !important;
+    overflow: hidden !important;
   }
 
   #a4-sheet {
@@ -1562,8 +1576,15 @@ select:focus {
     max-height: 297mm !important;
     page-break-inside: avoid !important;
     page-break-after: avoid !important;
+    break-inside: avoid !important;
     break-after: avoid !important;
     box-sizing: border-box !important;
+  }
+
+  #a4-sheet * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
   }
 
   /* Do not print red margin guide lines */
@@ -1573,6 +1594,12 @@ select:focus {
 
   .price-card.is-selected {
     outline: none !important;
+  }
+
+  /* Crisp cut lines when enabled */
+  #a4-sheet.show-cut-lines .price-card {
+    outline: 1px dashed rgba(0, 0, 0, 0.45) !important;
+    outline-offset: -1px !important;
   }
 
   /* Laser printer optimization: remove filter so all text and SVGs print at 100% native hardware DPI */
@@ -1607,7 +1634,7 @@ select:focus {
   display: none !important;
 }
 
-@media (max-width: 880px) {
+@media screen and (max-width: 880px) {
   .mobile-only {
     display: flex !important;
   }
@@ -1751,7 +1778,7 @@ select:focus {
 /* =========================================================================
    ULTRA-COMPACT MOBILE SCREENS (320PX - 360PX)
    ========================================================================= */
-@media (max-width: 360px) {
+@media screen and (max-width: 360px) {
   #sidebar-header {
     padding: 10px 10px;
   }
