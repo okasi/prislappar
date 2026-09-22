@@ -61,7 +61,7 @@ const COLOR_MAP = {
 };
 
 /**
- * 1. Comic Starburst Explosion (Default / Original Photo)
+ * 1. Comic Starburst Explosion (Default)
  */
 function getStarburstSvgContent(colors, burstColor, isWhite) {
   return `
@@ -499,7 +499,7 @@ export function getTitleFontSizeStyle(title = '', sizePref = '22pt') {
 }
 
 /**
- * Returns the Crown SVG matching the KÖTTHALLEN logo from the photo.
+ * Returns the Crown SVG matching the KÖTTHALLEN logo.
  */
 export function getCrownLogoSvg(isMonochrome = false) {
   if (isMonochrome) {
