@@ -13,7 +13,7 @@ const state = {
   showMarginsGuide: false,
   sheetMargin: '5mm',
   sheetGap: '0mm',
-  globalMonochrome: false,
+  globalMonochrome: true,
   zoom: 0.85,
   cards: []
 };
@@ -110,7 +110,7 @@ function initCardsState() {
       state.sheetGap = decoded.sheetGap || '0mm';
       state.showCutLines = decoded.showCutLines ?? true;
       state.showMarginsGuide = decoded.showMarginsGuide ?? false;
-      state.globalMonochrome = decoded.globalMonochrome ?? false;
+      state.globalMonochrome = decoded.globalMonochrome ?? true;
       state.activeCardIndex = decoded.activeCardIndex ?? 0;
       state.lang = decoded.lang || 'sv';
       state.cards = decoded.cards;
@@ -142,7 +142,7 @@ function initCardsState() {
       state.showMarginsGuide = parsed.showMarginsGuide ?? false;
       state.sheetMargin = parsed.sheetMargin || '5mm';
       state.sheetGap = parsed.sheetGap || '0mm';
-      state.globalMonochrome = parsed.globalMonochrome ?? false;
+      state.globalMonochrome = parsed.globalMonochrome ?? true;
       if (Array.isArray(parsed.cards) && parsed.cards.length > 0) {
         state.cards = parsed.cards.map(card => ({
           ...card,
