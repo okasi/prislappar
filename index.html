@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>A4 Prislappsgenerator | Butik & Chark</title>
+  <link rel="stylesheet" href="./src/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏷️</text></svg>">
+</head>
+<body>
+  <div id="app-container" class="view-editor">
+
+    <!-- MOBILE VIEW SWITCHER BAR (Visible only on mobile <= 880px, optimized for 320px) -->
+    <nav id="mobile-view-nav" class="mobile-only" aria-label="Mobilnavigering">
+      <button type="button" class="mobile-tab-btn active" id="tab-btn-editor">
+        <span>✏️</span>
+        <span data-i18n="tabEdit">Redigera</span>
+      </button>
+      <button type="button" class="mobile-tab-btn" id="tab-btn-preview">
+        <span>📄</span>
+        <span data-i18n="tabPreview">A4 Förhandsvisning</span>
+      </button>
+    </nav>
+
+    <!-- LEFT SIDEBAR: CONTROLS & SETTINGS -->
+    <aside id="app-sidebar">
+      
+      <!-- Header with Language Switcher -->
+      <header id="sidebar-header">
+        <div class="brand-title">
+          <span class="brand-icon">🥩</span>
+          <span id="txt-brand-title" data-i18n="brandTitle">CHARK PRISLAPPAR</span>
+        </div>
+        <div class="lang-switch-pills" id="lang-switch-container">
+          <button type="button" class="lang-pill-btn active" data-lang="sv" title="Svenska">🇸🇪 SV</button>
+          <button type="button" class="lang-pill-btn" data-lang="tr" title="Türkçe">🇹🇷 TR</button>
+          <button type="button" class="lang-pill-btn" data-lang="en" title="English">🇬🇧 EN</button>
+        </div>
+      </header>
+
+      <!-- Quick Layout Switcher Bar (2x4 vs 1x3) -->
+      <div id="layout-toggle-bar">
+        <span class="layout-toggle-label" data-i18n="layoutLabel">Layout</span>
+        <div class="layout-toggle-pills" id="layout-pills-container">
+          <button type="button" class="layout-pill-btn active" data-grid="2x4" id="btn-layout-2x4">
+            <span class="layout-icon">▦</span>
+            <span>2 × 4 (8 st)</span>
+          </button>
+          <button type="button" class="layout-pill-btn" data-grid="1x3" id="btn-layout-1x3">
+            <span class="layout-icon">▤</span>
+            <span>1 × 3 (3 st)</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Slot Selector Bar (Dynamic Cards + Add Button) -->
+      <div id="card-selector-bar">
+        <div class="selector-header">
+          <span data-i18n="selectTagToEdit">Välj Prislapp att redigera</span>
+          <div class="selector-header-actions">
+            <span id="active-slot-indicator">Lapp #1 av 1 (max 8)</span>
+            <button type="button" id="btn-delete-card" class="btn-slot-delete" title="Ta bort denna prislapp" style="display: none;">
+              <span>🗑️</span>
+              <span data-i18n="deleteTag">Ta bort</span>
+            </button>
+          </div>
+        </div>
+        <div class="slot-pills-row">
+          <div class="slot-pills" id="slot-pills-container">
+            <!-- Dynamically populated buttons -->
+          </div>
+          <button type="button" id="btn-add-card" class="slot-add-btn" title="Lägg till en ny prislapp">
+            <span>+</span>
+            <span data-i18n="addTag">Ny lapp</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Scrollable Control Settings -->
+      <div id="sidebar-body">
+
+        <!-- 1. PRODUKT & PRIS -->
+        <section class="control-card">
+          <div class="card-header">
+            <div class="card-header-title">
+              <span class="card-header-icon">🏷️</span>
+              <span data-i18n="secProductPrice">Produkt & Pris</span>
+            </div>
+          </div>
+          <div class="card-content">
+            <div class="field-grid-2">
+              <div class="field-row">
+                <label class="field-label" for="input-title" data-i18n="productName">Produktnamn</label>
+                <input type="text" id="input-title" placeholder="t.ex. Kalvframdel" value="Kalvframdel">
+              </div>
+              <div class="field-row">
+                <label class="field-label" for="select-title-size">
+                  <span data-i18n="fontSize">Textstorlek</span>
+                  <span class="field-hint" data-i18n="fontSizeHint">Auto no-wrap</span>
+                </label>
+                <select id="select-title-size">
+                  <option value="auto" selected data-i18n="sizeAuto">Auto (No-wrap)</option>
+                  <option value="xlarge" data-i18n="sizeXLarge">Extra stor (24pt)</option>
+                  <option value="large" data-i18n="sizeLarge">Stor (20pt)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="field-grid-3">
+              <div class="field-row">
+                <label class="field-label" for="input-price-int" data-i18n="priceKr">Pris (kr)</label>
+                <input type="text" id="input-price-int" placeholder="69" value="69">
+              </div>
+              <div class="field-row">
+                <label class="field-label" for="input-price-dec" data-i18n="cents">Ören</label>
+                <input type="text" id="input-price-dec" placeholder="90" value="90">
+              </div>
+              <div class="field-row field-col-unit">
+                <label class="field-label" for="input-unit" data-i18n="unit">Enhet</label>
+                <select id="input-unit">
+                  <option value="/kg">/kg</option>
+                  <option value=" kr/kg">kr/kg</option>
+                  <option value="/st">/st</option>
+                  <option value=" kr/st">kr/st</option>
+                  <option value="/hg">/hg</option>
+                  <option value="/förp">/förp</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="field-row">
+              <label class="field-label" for="select-price-shape" data-i18n="priceShape">Form på prisbakgrund (Illustration)</label>
+              <select id="select-price-shape">
+                <option value="starburst" selected data-i18n="shapeStarburst">💥 Comic Explosion (Klassisk stjärna)</option>
+                <option value="burst-sharp" data-i18n="shapeBurstSharp">⚡ Tagging Stjärna (16-Uddig)</option>
+                <option value="seal" data-i18n="shapeSeal">🏷️ Slaktarsigill (Rund Rosett)</option>
+                <option value="sunburst" data-i18n="shapeSunburst">☀️ Solstrålar (Retro Sunburst)</option>
+                <option value="octagon" data-i18n="shapeOctagon">🛑 Prisoktagon (Stoppskylt)</option>
+                <option value="badge" data-i18n="shapeBadge">🎖️ Prisplakett (Klassisk Plakett)</option>
+                <option value="diamond" data-i18n="shapeDiamond">💠 Diamant (Romb)</option>
+                <option value="circle" data-i18n="shapeCircle">⚪ Minimal Cirkel (Ren Disc)</option>
+              </select>
+            </div>
+
+            <div class="field-row">
+              <label class="field-label" data-i18n="priceBgColor">Prisbakgrund färg & stil</label>
+              <div class="color-options" id="burst-color-options">
+                <button type="button" class="color-chip chip-orange active" data-color="orange" title="Orange"></button>
+                <button type="button" class="color-chip chip-red" data-color="red" title="Röd"></button>
+                <button type="button" class="color-chip chip-yellow" data-color="yellow" title="Gul"></button>
+                <button type="button" class="color-chip chip-green" data-color="green" title="Grön"></button>
+                <button type="button" class="color-chip chip-blue" data-color="blue" title="Blå"></button>
+                <button type="button" class="color-chip chip-mono" data-color="mono" title="Svartvit (Mörk bakgrund)">B&W</button>
+                <button type="button" class="color-chip chip-mono-white" data-color="mono-white" title="Svartvit (Vit bakgrund)">Vit</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 2. URSPRUNGSLÄND & FLAGGA -->
+        <section class="control-card">
+          <div class="card-header">
+            <div class="card-header-title">
+              <span class="card-header-icon">🌍</span>
+              <span data-i18n="secOrigin">Ursprung & Flagga</span>
+            </div>
+          </div>
+          <div class="card-content">
+            <div class="field-row">
+              <label class="field-label" for="select-country" data-i18n="selectCountryQuick">Välj Land (Snabbval)</label>
+              <select id="select-country">
+                <!-- Populated dynamically -->
+              </select>
+            </div>
+
+            <div class="field-row">
+              <label class="field-label" for="input-origin" data-i18n="originText">Ursprungstext på skylt</label>
+              <input type="text" id="input-origin" placeholder="t.ex. Litauen" value="Litauen">
+            </div>
+
+            <label class="toggle-row">
+              <span class="toggle-label">
+                <span data-i18n="showFlag">Visa nationalflagga</span>
+                <span id="flag-preview-badge" style="font-size: 16px;">🇱🇹</span>
+              </span>
+              <input type="checkbox" id="toggle-flag" class="switch-input">
+            </label>
+          </div>
+        </section>
+
+        <!-- 3. HALAL MÄRKE -->
+        <section class="control-card">
+          <div class="card-header">
+            <div class="card-header-title">
+              <span class="card-header-icon">✨</span>
+              <span data-i18n="secHalal">Halal Certifiering</span>
+            </div>
+          </div>
+          <div class="card-content">
+            <label class="toggle-row">
+              <span class="toggle-label" data-i18n="showHalal">Visa Halal stämpel</span>
+              <input type="checkbox" id="toggle-halal" class="switch-input" checked>
+            </label>
+
+            <div class="field-row" id="halal-style-row">
+              <label class="field-label" for="select-halal-style" data-i18n="stampStyle">Stämpelstil</label>
+              <select id="select-halal-style">
+                <option value="classic" data-i18n="stampClassic">Klassisk Svart Oval (som fotot)</option>
+                <option value="gold" data-i18n="stampGold">Gyllene Emblem</option>
+                <option value="green" data-i18n="stampGreen">Grön Certifierad</option>
+              </select>
+            </div>
+          </div>
+        </section>
+
+        <!-- 4. FÖRETAGSNAMN & LOGOTYP -->
+        <section class="control-card">
+          <div class="card-header">
+            <div class="card-header-title">
+              <span class="card-header-icon">👑</span>
+              <span data-i18n="secCompany">Företagsnamn & Logo</span>
+            </div>
+          </div>
+          <div class="card-content">
+            <div class="field-row">
+              <label class="field-label" for="input-company-name" data-i18n="companyName">Företagsnamn</label>
+              <input type="text" id="input-company-name" placeholder="t.ex. KÖTTHALLEN" value="KÖTTHALLEN">
+            </div>
+
+            <div class="field-row">
+              <label class="field-label" for="input-company-sub" data-i18n="companySub">Underrubrik / Ribbon text</label>
+              <input type="text" id="input-company-sub" placeholder="t.ex. KVALITETSKÖTT (Valfri)" value="">
+            </div>
+
+            <div class="field-row">
+              <label class="field-label" for="select-logo-type" data-i18n="logoType">Logotyp ikon</label>
+              <select id="select-logo-type">
+                <option value="crown" data-i18n="logoCrown">Gyllene Kungakrona (som fotot)</option>
+                <option value="meat" data-i18n="logoMeat">Köttöxa / Charkikon</option>
+                <option value="custom" data-i18n="logoCustom">Egen uppladdad logotyp...</option>
+                <option value="none" data-i18n="logoNone">Ingen ikon</option>
+              </select>
+            </div>
+
+            <div class="field-row" id="custom-logo-row" style="display: none;">
+              <label class="field-label" for="input-custom-logo" data-i18n="uploadLogo">Ladda upp logotyp (PNG/JPG)</label>
+              <input type="file" id="input-custom-logo" accept="image/*">
+            </div>
+          </div>
+        </section>
+
+
+
+        <!-- BATCH ACTIONS -->
+        <div class="action-btn-row">
+          <button type="button" class="btn-secondary" id="btn-copy-to-all" title="Kopiera nuvarande lapps inställningar till alla platser">
+            <span>📋</span>
+            <span data-i18n="btnCopyToAll">Kopiera till alla</span>
+          </button>
+          <button type="button" class="btn-secondary" id="btn-apply-branding-all" title="Tillämpa butiksnamn och logo på alla lappar">
+            <span>👑</span>
+            <span data-i18n="btnApplyBranding">Branding alla</span>
+          </button>
+        </div>
+
+        <div class="action-btn-row">
+          <button type="button" class="btn-secondary" id="btn-fill-presets" title="Fyll alla platser med vanliga charkartiklar">
+            <span>🥩</span>
+            <span data-i18n="btnFillPresets">Fyll chark</span>
+          </button>
+          <button type="button" class="btn-secondary" id="btn-reset-cards" title="Återställ till standard">
+            <span>🔄</span>
+            <span data-i18n="btnReset">Återställ</span>
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Sticky Sidebar Footer: Print & Exports -->
+      <footer id="sidebar-footer">
+        <button type="button" class="btn-primary" id="btn-print-sheet">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 6 2 18 2 18 9"></polyline>
+            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+            <rect x="6" y="14" width="12" height="8"></rect>
+          </svg>
+          <span data-i18n="btnPrint">SKRIV UT A4 (PRINT)</span>
+        </button>
+
+        <div class="btn-export-row">
+          <button type="button" class="btn-export-small" id="btn-export-sheet">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            <span data-i18n="btnExportSheet">Hela A4 (PNG)</span>
+          </button>
+
+          <button type="button" class="btn-export-small" id="btn-export-single">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <circle cx="8.5" cy="8.5" r="1.5"></circle>
+              <polyline points="21 15 16 10 5 21"></polyline>
+            </svg>
+            <span data-i18n="btnExportSingle">Vald lapp (PNG)</span>
+          </button>
+        </div>
+      </footer>
+
+    </aside>
+
+    <!-- RIGHT STAGE: REALISTIC A4 PREVIEW & INTERACTIVE EDITING -->
+    <main id="viewport-stage">
+      
+      <!-- Stage Floating Toolbar -->
+      <div id="stage-toolbar" class="no-print">
+        <button type="button" class="zoom-btn" id="btn-zoom-out" title="Zooma ut">−</button>
+        <span class="zoom-label" id="zoom-percentage">85%</span>
+        <button type="button" class="zoom-btn" id="btn-zoom-in" title="Zooma in">+</button>
+        <button type="button" class="zoom-btn" id="btn-zoom-fit" title="Anpassa till skärm" style="font-size: 11px; width: auto; padding: 0 8px; border-radius: 12px;">Fit</button>
+        
+        <div class="toolbar-divider"></div>
+        
+        <button type="button" class="toolbar-toggle-btn" id="btn-toggle-mono" title="Förhandsgranska svartvit utskrift">
+          <span>⬛⬜</span>
+          <span class="toolbar-btn-text" data-i18n="btnMono">Svartvit</span>
+        </button>
+
+        <button type="button" class="toolbar-toggle-btn active" id="btn-toggle-guides" title="Slå på/av streckade klipplinjer">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 3h18v18H3z"></path>
+            <path d="M3 12h18"></path>
+            <path d="M12 3v18"></path>
+          </svg>
+          <span class="toolbar-btn-text" data-i18n="btnCutLines">Klipplinjer</span>
+        </button>
+      </div>
+
+      <!-- Scalable A4 Sheet Paper Wrapper -->
+      <div id="a4-sheet-wrapper">
+        <div id="a4-sheet" class="grid-2x4 show-cut-lines">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
+
+    </main>
+
+  </div>
+
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>
