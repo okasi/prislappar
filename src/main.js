@@ -2,6 +2,7 @@ import { COUNTRIES, DEFAULT_BRANDING, INITIAL_CARDS, GRID_CONFIGS, DEMO_PRESET_I
 import { renderCardHtml } from './cardRenderer.js';
 import { printSheet, exportSingleCard, exportFullSheet } from './exportUtils.js';
 import { getI18n } from './i18n.js';
+import { encodeStateToParam, decodeStateFromParam } from './stateSharing.js';
 
 // Application State
 const state = {
@@ -80,11 +81,81 @@ const zoomPercentage = document.getElementById('zoom-percentage');
 const btnToggleGuides = document.getElementById('btn-toggle-guides');
 const btnToggleMono = document.getElementById('btn-toggle-mono');
 
+// Share / URL State Buttons
+const btnShareLink = document.getElementById('btn-share-link');
+const btnShareLinkTop = document.getElementById('btn-share-link-top');
+const toastNotification = document.getElementById('toast-notification');
+
+/** Show a temporary toast notification */
+let _toastTimer = null;
+function showToast(msg) {
+  if (!toastNotification) return;
+  toastNotification.textContent = msg;
+  toastNotification.classList.add('toast-visible');
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(() => {
+    toastNotification.classList.remove('toast-visible');
+  }, 2800);
+}
+
+/** Copy the current state as a shareable URL to the clipboard */
+function copyShareLink() {
+  const encoded = encodeStateToParam(state);
+  const url = new URL(window.location.href);
+  url.search = ''; // clear existing params
+  url.searchParams.set('s', encoded);
+  // Remove nocache/test params
+  url.searchParams.delete('nocache');
+
+  const shareUrl = url.toString();
+
+  // Flash both share buttons green
+  [btnShareLink, btnShareLinkTop].forEach(btn => {
+    if (!btn) return;
+    btn.classList.add('btn-share-copied');
+    setTimeout(() => btn.classList.remove('btn-share-copied'), 1800);
+  });
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(shareUrl).then(() => {
+      const t = getI18n(state.lang);
+      showToast(t.linkCopied || 'Länk kopierad! 📋');
+    }).catch(() => {
+      // Fallback: show URL in prompt
+      prompt('Kopiera delningslänken:', shareUrl);
+    });
+  } else {
+    prompt('Kopiera delningslänken:', shareUrl);
+  }
+}
+
 /**
- * Initialize state from localStorage or defaults.
- * Defaults to strictly 1 card out of total slots.
+ * Initialize state from URL query param (?s=...) or localStorage or defaults.
+ * URL param takes highest priority so shared links always reproduce exact setup.
  */
 function initCardsState() {
+  // --- Priority 1: URL query param ?s=... ---
+  const urlParams = new URLSearchParams(window.location.search);
+  const urlState = urlParams.get('s');
+  if (urlState) {
+    const decoded = decodeStateFromParam(urlState);
+    if (decoded && Array.isArray(decoded.cards) && decoded.cards.length > 0) {
+      state.gridType = decoded.gridType || '2x4';
+      state.sheetMargin = decoded.sheetMargin || '5mm';
+      state.sheetGap = decoded.sheetGap || '0mm';
+      state.showCutLines = decoded.showCutLines ?? true;
+      state.showMarginsGuide = decoded.showMarginsGuide ?? false;
+      state.globalMonochrome = decoded.globalMonochrome ?? false;
+      state.activeCardIndex = decoded.activeCardIndex ?? 0;
+      state.lang = decoded.lang || 'sv';
+      state.cards = decoded.cards;
+      // Clamp active index
+      if (state.activeCardIndex >= state.cards.length) state.activeCardIndex = 0;
+      return; // Done — skip localStorage
+    }
+  }
+
+  // --- Priority 2: localStorage ---
   const versionKey = 'butcher_v5_no_halal_company';
   const hasV5 = localStorage.getItem(versionKey);
 
@@ -726,6 +797,11 @@ function setupEventListeners() {
   btnPrintSheet.addEventListener('click', () => {
     printSheet();
   });
+
+  // Share link (both sidebar button + top toolbar button)
+  function handleShareClick() { copyShareLink(); }
+  if (btnShareLink) btnShareLink.addEventListener('click', handleShareClick);
+  if (btnShareLinkTop) btnShareLinkTop.addEventListener('click', handleShareClick);
 
   btnExportSheet.addEventListener('click', async () => {
     try {

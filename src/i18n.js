@@ -116,6 +116,8 @@ export const TRANSLATIONS = {
     btnPrint: 'SKRIV UT A4 (PRINT)',
     btnExportSheet: 'Hela A4 (PNG)',
     btnExportSingle: 'Vald lapp (PNG)',
+    btnShareLink: 'Dela länk',
+    linkCopied: 'Delningslänk kopierad till urklipp! 📋',
     savingText: 'Sparar...',
 
     // Toolbar
@@ -242,6 +244,8 @@ export const TRANSLATIONS = {
     btnPrint: 'A4 YAZDIR (PRINT / PDF)',
     btnExportSheet: 'Tüm A4 (PNG)',
     btnExportSingle: 'Seçili Etiket (PNG)',
+    btnShareLink: 'Linki Paylaş',
+    linkCopied: 'Paylaşım linki panoya kopyalandı! 📋',
     savingText: 'Kaydediliyor...',
 
     // Toolbar
@@ -368,6 +372,8 @@ export const TRANSLATIONS = {
     btnPrint: 'PRINT A4 (PRINT / PDF)',
     btnExportSheet: 'Full A4 (PNG)',
     btnExportSingle: 'Selected Tag (PNG)',
+    btnShareLink: 'Share Link',
+    linkCopied: 'Share link copied to clipboard! 📋',
     savingText: 'Saving...',
 
     // Toolbar
