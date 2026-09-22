@@ -555,45 +555,58 @@ export function getMeatLogoSvg(isMonochrome = false) {
 }
 
 /**
- * Returns the Halal Stamp SVG with authentic Arabic calligraphy and HALAL text.
+ * Returns the Halal Stamp SVG with crescent moon, star, Arabic حلال, and HALAL text.
+ * Matches the classic circular halal certification stamp design.
  */
 export function getHalalBadgeSvg(style = 'classic', isMonochrome = false) {
-  if (isMonochrome || style === 'classic') {
-    return `
-      <div class="halal-stamp style-classic">
-        <div class="halal-oval">
-          <span class="halal-arabic">حلال</span>
-          <span class="halal-text">HALAL</span>
-        </div>
-      </div>
-    `;
-  }
-  if (style === 'gold') {
-    return `
-      <div class="halal-stamp style-gold">
-        <div class="halal-oval">
-          <span class="halal-arabic">حلال</span>
-          <span class="halal-text">HALAL</span>
-        </div>
-      </div>
-    `;
-  }
-  if (style === 'green') {
-    return `
-      <div class="halal-stamp style-green">
-        <div class="halal-oval">
-          <span class="halal-arabic">حلال</span>
-          <span class="halal-text">HALAL</span>
-        </div>
-      </div>
-    `;
-  }
+  const effectiveStyle = (isMonochrome || style === 'classic') ? 'classic' : style;
+
+  const colors = {
+    classic: { stroke: '#111', fill: 'rgba(255,255,255,0.85)', text: '#111' },
+    gold:    { stroke: '#b45309', fill: '#fef3c7', text: '#78350f' },
+    green:   { stroke: '#047857', fill: 'rgba(209,250,229,0.8)', text: '#064e3b' },
+  };
+  const c = colors[effectiveStyle] || colors.classic;
+
   return `
-    <div class="halal-stamp style-classic">
-      <div class="halal-oval">
-        <span class="halal-arabic">حلال</span>
-        <span class="halal-text">HALAL</span>
-      </div>
+    <div class="halal-stamp style-${effectiveStyle}">
+      <svg class="halal-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <!-- Circle border -->
+        <circle cx="50" cy="50" r="47" fill="${c.fill}" stroke="${c.stroke}" stroke-width="2.2"/>
+
+        <!-- Crescent moon -->
+        <g transform="translate(50,21)">
+          <circle cx="0" cy="0" r="10" fill="${c.text}"/>
+          <circle cx="4.5" cy="-3" r="7.8" fill="${c.fill}"/>
+        </g>
+
+        <!-- 5-pointed star -->
+        <polygon
+          points="50,7.5 51.9,13.3 57.9,13.3 53,16.7 54.9,22.5 50,19.1 45.1,22.5 47,16.7 42.1,13.3 48.1,13.3"
+          fill="${c.text}"
+        />
+
+        <!-- Arabic حلال -->
+        <text
+          x="50" y="65"
+          text-anchor="middle"
+          font-family="'Amiri','Traditional Arabic',serif"
+          font-size="28"
+          font-weight="700"
+          fill="${c.text}"
+        >حلال</text>
+
+        <!-- HALAL -->
+        <text
+          x="50" y="80"
+          text-anchor="middle"
+          font-family="'Inter','Arial',sans-serif"
+          font-size="11"
+          font-weight="800"
+          letter-spacing="2"
+          fill="${c.text}"
+        >HALAL</text>
+      </svg>
     </div>
   `;
 }

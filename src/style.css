@@ -1105,54 +1105,14 @@ select:focus {
   display: inline-flex;
 }
 
-.halal-oval {
-  border: 1.8px solid #111111;
-  border-radius: 50px;
-  padding: 4px 14px 3px 14px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: rgba(255, 255, 255, 0.8);
+.halal-svg {
+  width: 11mm;
+  height: 11mm;
+  display: block;
 }
 
-.halal-arabic {
-  font-family: 'Amiri', 'Traditional Arabic', serif;
-  font-size: 14.5pt;
-  line-height: 1.1;
-  font-weight: 700;
-  color: #111111;
-  padding-top: 3.5px;
-  margin-bottom: 0.5px;
-}
+/* Style variants — colours are handled inline in the SVG, nothing extra needed */
 
-.halal-text {
-  font-family: 'Inter', sans-serif;
-  font-size: 6.5pt;
-  font-weight: 800;
-  letter-spacing: 0.12em;
-  color: #111111;
-  line-height: 1;
-}
-
-/* Halal Style Variants */
-.halal-stamp.style-gold .halal-oval {
-  border-color: #b45309;
-  background: linear-gradient(135deg, #fef3c7, #fde68a);
-}
-.halal-stamp.style-gold .halal-arabic,
-.halal-stamp.style-gold .halal-text {
-  color: #78350f;
-}
-
-.halal-stamp.style-green .halal-oval {
-  border-color: #047857;
-  background: rgba(209, 250, 229, 0.7);
-}
-.halal-stamp.style-green .halal-arabic,
-.halal-stamp.style-green .halal-text {
-  color: #064e3b;
-}
 
 /* Store Branding (Bottom Left) */
 .company-branding {
