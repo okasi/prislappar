@@ -1,6 +1,5 @@
-import { COUNTRIES, DEFAULT_BRANDING, INITIAL_CARDS, GRID_CONFIGS, DEMO_PRESET_ITEMS, DEFAULT_CARD } from './presets.js';
+import { COUNTRIES, DEFAULT_BRANDING, GRID_CONFIGS, DEMO_PRESET_ITEMS, DEFAULT_CARD } from './presets.js';
 import { renderCardHtml } from './cardRenderer.js';
-import { printSheet, exportSingleCard, exportFullSheet } from './exportUtils.js';
 import { getI18n } from './i18n.js';
 import { encodeStateToParam, decodeStateFromParam } from './stateSharing.js';
 
@@ -70,8 +69,6 @@ const btnFillPresets = document.getElementById('btn-fill-presets');
 const btnResetCards = document.getElementById('btn-reset-cards');
 
 const btnPrintSheet = document.getElementById('btn-print-sheet');
-const btnExportSheet = document.getElementById('btn-export-sheet');
-const btnExportSingle = document.getElementById('btn-export-single');
 
 // Zoom & Toolbar Elements
 const btnZoomIn = document.getElementById('btn-zoom-in');
@@ -307,6 +304,20 @@ function populateCountryDropdown() {
 }
 
 /**
+ * Bind click behavior for a price card on the sheet:
+ * select it, and on mobile switch back to the editor view
+ */
+function bindCardClick(el) {
+  el.addEventListener('click', () => {
+    const idx = parseInt(el.getAttribute('data-card-index'), 10);
+    setActiveCardIndex(idx);
+    if (window.innerWidth <= 880) {
+      setMobileView('editor');
+    }
+  });
+}
+
+/**
  * Render the A4 Sheet and cards (including empty slots)
  */
 function renderSheet() {
@@ -351,16 +362,7 @@ function renderSheet() {
   a4Sheet.innerHTML = html;
 
   // Add click listeners to cards on sheet
-  const cardElements = a4Sheet.querySelectorAll('.price-card');
-  cardElements.forEach(el => {
-    el.addEventListener('click', () => {
-      const idx = parseInt(el.getAttribute('data-card-index'), 10);
-      setActiveCardIndex(idx);
-      if (window.innerWidth <= 880) {
-        setMobileView('editor');
-      }
-    });
-  });
+  a4Sheet.querySelectorAll('.price-card').forEach(bindCardClick);
 
   // Add click listeners to empty slots on sheet to add card
   const emptySlots = a4Sheet.querySelectorAll('.empty-card-slot');
@@ -511,10 +513,7 @@ function updateActiveCard(changes) {
     tempContainer.innerHTML = renderCardHtml(card, state.activeCardIndex, true, state.globalMonochrome);
     const newElement = tempContainer.firstElementChild;
     oldElement.replaceWith(newElement);
-
-    newElement.addEventListener('click', () => {
-      setActiveCardIndex(state.activeCardIndex);
-    });
+    bindCardClick(newElement);
   } else {
     renderSheet();
   }
@@ -759,53 +758,9 @@ function setupEventListeners() {
     }
   });
 
-  // Print & Export
+  // Print
   btnPrintSheet.addEventListener('click', () => {
-    printSheet();
-  });
-
-  btnExportSheet.addEventListener('click', async () => {
-    try {
-      btnExportSheet.disabled = true;
-      btnExportSheet.textContent = 'Sparar...';
-      await exportFullSheet(`A4-prislappar-${Date.now()}.png`);
-    } catch (err) {
-      console.error(err);
-      alert('Kunde inte exportera hela arket: ' + err.message);
-    } finally {
-      btnExportSheet.disabled = false;
-      btnExportSheet.innerHTML = `
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-          <polyline points="7 10 12 15 17 10"></polyline>
-          <line x1="12" y1="15" x2="12" y2="3"></line>
-        </svg>
-        <span>Hela A4 (PNG)</span>
-      `;
-    }
-  });
-
-  btnExportSingle.addEventListener('click', async () => {
-    try {
-      const card = state.cards[state.activeCardIndex];
-      const filename = `prislapp-${(card.title || 'vara').toLowerCase().replace(/\s+/g, '-')}.png`;
-      btnExportSingle.disabled = true;
-      btnExportSingle.textContent = 'Sparar...';
-      await exportSingleCard(state.activeCardIndex, filename);
-    } catch (err) {
-      console.error(err);
-      alert('Kunde inte exportera vald prislapp: ' + err.message);
-    } finally {
-      btnExportSingle.disabled = false;
-      btnExportSingle.innerHTML = `
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-          <circle cx="8.5" cy="8.5" r="1.5"></circle>
-          <polyline points="21 15 16 10 5 21"></polyline>
-        </svg>
-        <span>Vald lapp (PNG)</span>
-      `;
-    }
+    window.print();
   });
 
   // Zoom Toolbar

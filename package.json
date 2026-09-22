@@ -10,8 +10,5 @@
   },
   "devDependencies": {
     "vite": "^5.2.0"
-  },
-  "dependencies": {
-    "html2canvas": "^1.4.1"
   }
 }

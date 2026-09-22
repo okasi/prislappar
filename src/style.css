@@ -39,6 +39,15 @@
   padding: 0;
 }
 
+/* iOS Safari: dynamic viewport height keeps the bottom bar visible
+   when the URL bar collapses/expands (100vh alone overflows) */
+@supports (height: 100dvh) {
+  body,
+  #app-container {
+    height: 100dvh;
+  }
+}
+
 body {
   background-color: var(--bg-dark);
   color: var(--text-main);
@@ -690,13 +699,12 @@ select:focus {
   height: 100vh;
   overflow: auto;
   background: #181920;
-  background-image: 
+  background-image:
     radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 0);
   background-size: 24px 24px;
   position: relative;
   display: flex;
   align-items: flex-start;
-  justify-content: center;
   padding: 40px 20px 80px 20px;
 }
 
@@ -779,9 +787,13 @@ select:focus {
    With Margins & Printer Safety
    ========================================================================= */
 #a4-sheet-wrapper {
-  transform: scale(var(--preview-zoom));
-  transform-origin: top center;
-  transition: transform 0.1s ease-out;
+  /* Layout box must match the scaled visual size, otherwise the stage
+     keeps an invisible unscaled scroll area (esp. on mobile) */
+  width: calc(210mm * var(--preview-zoom));
+  height: calc(297mm * var(--preview-zoom));
+  /* margin auto = safe centering: centers when it fits, fully scrollable when zoomed in */
+  margin: 0 auto;
+  transition: width 0.1s ease-out, height 0.1s ease-out;
 }
 
 #a4-sheet {
@@ -794,6 +806,9 @@ select:focus {
   box-sizing: border-box;
   overflow: hidden;
   user-select: none;
+  transform: scale(var(--preview-zoom));
+  transform-origin: top left;
+  transition: transform 0.1s ease-out;
   
   /* Dynamic Margins & Gap */
   padding: var(--sheet-margin, 5mm);
@@ -1580,7 +1595,6 @@ select:focus {
   }
 
   #a4-sheet-wrapper {
-    transform: none !important;
     margin: 0 !important;
     padding: 0 !important;
     width: 210mm !important;
@@ -1590,6 +1604,7 @@ select:focus {
   }
 
   #a4-sheet {
+    transform: none !important;
     box-shadow: none !important;
     margin: 0 !important;
     width: 210mm !important;
@@ -1741,6 +1756,14 @@ select:focus {
     padding: 56px 6px 60px 6px;
     overflow: auto;
     -webkit-overflow-scrolling: touch;
+  }
+
+  /* iOS Safari dynamic viewport height */
+  @supports (height: 100dvh) {
+    #app-container.view-editor #app-sidebar,
+    #app-container.view-preview #viewport-stage {
+      height: calc(100dvh - 48px);
+    }
   }
 
   /* Floating stage toolbar on mobile */
