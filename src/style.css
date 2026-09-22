@@ -245,22 +245,34 @@ body {
 .selector-header-actions {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 5px;
+  flex-shrink: 0;
+}
+
+#active-slot-indicator {
+  font-size: 9px;
+  white-space: nowrap;
 }
 
 .btn-slot-delete {
   background: rgba(239, 68, 68, 0.12);
   border: 1px solid rgba(239, 68, 68, 0.3);
   color: #fca5a5;
-  font-size: 10.5px;
+  font-size: 10px;
   font-weight: 600;
   border-radius: 4px;
-  padding: 2px 7px;
+  padding: 2px 5px;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 3px;
   transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+/* Hide the text label inside delete button — icon is enough */
+.btn-slot-delete > span:last-child {
+  display: none;
 }
 
 .btn-slot-delete:hover {

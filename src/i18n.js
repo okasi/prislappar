@@ -10,7 +10,7 @@ export const TRANSLATIONS = {
     langSelectorLabel: 'Språk',
 
     // Slot selector & layout
-    selectTagToEdit: 'Välj Prislapp att redigera',
+    selectTagToEdit: 'Prislappar',
     tagIndicator: (active, total, max) => max ? `Lapp #${active} av ${total} (max ${max})` : `Lapp #${active} av ${total}`,
     addTag: 'Lägg till lapp',
     deleteTag: 'Ta bort lapp',
@@ -138,7 +138,7 @@ export const TRANSLATIONS = {
     langSelectorLabel: 'Dil',
 
     // Slot selector & layout
-    selectTagToEdit: 'Düzenlenecek Fiyat Etiketini Seçin',
+    selectTagToEdit: 'Etiketler',
     tagIndicator: (active, total, max) => max ? `Etiket #${active} / ${total} (maks ${max})` : `Etiket #${active} / ${total}`,
     addTag: 'Etiket Ekle',
     deleteTag: 'Etiketi Sil',
@@ -266,7 +266,7 @@ export const TRANSLATIONS = {
     langSelectorLabel: 'Language',
 
     // Slot selector & layout
-    selectTagToEdit: 'Select Price Tag to Edit',
+    selectTagToEdit: 'Price Tags',
     tagIndicator: (active, total, max) => max ? `Tag #${active} of ${total} (max ${max})` : `Tag #${active} of ${total}`,
     addTag: 'Add Tag',
     deleteTag: 'Delete Tag',
