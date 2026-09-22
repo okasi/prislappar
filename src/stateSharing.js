@@ -96,7 +96,7 @@ export function decodeStateFromParam(encodedStr) {
     const data = JSON.parse(jsonStr);
 
     // Compact schema (v: 1, c: cards array)
-    if (data.c && Array.isArray(data.c)) {
+    if (Array.isArray(data.c) && data.c.length > 0) {
       const cards = data.c.map((item, idx) => ({
         id: Date.now() + idx,
         title: item.t !== undefined ? item.t : DEFAULT_CARD.title,
