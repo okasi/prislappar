@@ -110,6 +110,8 @@ function initCardsState() {
       if (Array.isArray(parsed.cards) && parsed.cards.length > 0) {
         state.cards = parsed.cards.map(card => ({
           ...card,
+          titleSize: card.titleSize || '22pt',
+          priceShape: card.priceShape || 'sunburst',
           companySub: card.companySub === 'حلال' ? '' : (card.companySub || '')
         }));
       } else {
@@ -129,6 +131,19 @@ function initCardsState() {
   }
   if (state.activeCardIndex >= state.cards.length) {
     state.activeCardIndex = 0;
+  }
+
+  // Migration for v7: ensure 22pt text size & sunburst shape are default for all cards
+  const v7Key = 'prislappar_v7_22pt_sunburst';
+  const hasV7 = localStorage.getItem(v7Key);
+  if (!hasV7) {
+    state.cards = state.cards.map(c => ({
+      ...c,
+      titleSize: '22pt',
+      priceShape: 'sunburst'
+    }));
+    localStorage.setItem(v7Key, 'true');
+    persistState();
   }
 }
 
@@ -172,7 +187,8 @@ function addNewCard() {
     showHalal: activeCard.showHalal ?? true,
     halalStyle: activeCard.halalStyle || 'classic',
     bgTheme: activeCard.bgTheme || 'ice-blue',
-    priceShape: activeCard.priceShape || 'starburst',
+    titleSize: activeCard.titleSize || '22pt',
+    priceShape: activeCard.priceShape || 'sunburst',
     burstColor: activeCard.burstColor || 'orange'
   };
 
@@ -390,11 +406,11 @@ function syncFormFromActiveCard() {
   if (!card) return;
 
   inputTitle.value = card.title || '';
-  selectTitleSize.value = card.titleSize || 'auto';
+  selectTitleSize.value = card.titleSize || '22pt';
   inputPriceInt.value = card.priceInt || '';
   inputPriceDec.value = card.priceDec || '';
   inputUnit.value = card.unit || '/kg';
-  selectPriceShape.value = card.priceShape || 'starburst';
+  selectPriceShape.value = card.priceShape || 'sunburst';
 
   // Burst color
   burstColorOptions.querySelectorAll('.color-chip').forEach(chip => {
@@ -698,6 +714,7 @@ function setupEventListeners() {
       localStorage.removeItem('butcher_cards_state');
       localStorage.removeItem('butcher_v4_single_card');
       localStorage.removeItem('butcher_v5_no_halal_company');
+      localStorage.removeItem('prislappar_v7_22pt_sunburst');
       initCardsState();
       renderSheet();
       renderSlotPills();

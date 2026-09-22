@@ -41,7 +41,7 @@ export const PRICE_SHAPES = [
 export const DEFAULT_CARD = {
   id: 1,
   title: 'Kalvframdel',
-  titleSize: 'auto',
+  titleSize: '22pt',
   origin: 'Litauen',
   showFlag: false,
   flagEmoji: '🇱🇹',
@@ -55,7 +55,7 @@ export const DEFAULT_CARD = {
   logoType: 'crown',
   customLogoUrl: '',
   burstColor: 'orange', // 'orange', 'red', 'yellow', 'green', 'blue', 'mono', 'mono-white'
-  priceShape: 'starburst', // 'starburst', 'seal', 'sunburst', 'shield', 'splash', 'circle'
+  priceShape: 'sunburst', // Solstrålar (Retro Sunburst) by default for all
   bgTheme: 'ice-blue' // 'ice-blue', 'clean-white', 'warm-yellow', 'kraft'
 };
 
@@ -67,130 +67,82 @@ export const INITIAL_CARDS = [
 export const DEMO_PRESET_ITEMS = [
   { ...DEFAULT_CARD },
   {
+    ...DEFAULT_CARD,
     id: 2,
     title: 'Högrev',
     origin: 'Sverige',
     showFlag: true,
     flagEmoji: '🇸🇪',
-    showHalal: true,
-    halalStyle: 'classic',
     priceInt: '119',
     priceDec: '00',
-    unit: '/kg',
-    companyName: 'KÖTTHALLEN',
-    companySub: '',
-    logoType: 'crown',
-    customLogoUrl: '',
-    burstColor: 'orange',
-    bgTheme: 'ice-blue'
+    unit: '/kg'
   },
   {
+    ...DEFAULT_CARD,
     id: 3,
     title: 'Oxfilé',
     origin: 'Sverige',
     showFlag: true,
     flagEmoji: '🇸🇪',
-    showHalal: true,
-    halalStyle: 'classic',
     priceInt: '299',
     priceDec: '00',
     unit: '/kg',
-    companyName: 'KÖTTHALLEN',
-    companySub: '',
-    logoType: 'crown',
-    customLogoUrl: '',
-    burstColor: 'red',
-    bgTheme: 'ice-blue'
+    burstColor: 'red'
   },
   {
+    ...DEFAULT_CARD,
     id: 4,
     title: 'Entrecôte',
     origin: 'Irland',
     showFlag: true,
     flagEmoji: '🇮🇪',
-    showHalal: true,
-    halalStyle: 'classic',
     priceInt: '249',
     priceDec: '00',
-    unit: '/kg',
-    companyName: 'KÖTTHALLEN',
-    companySub: '',
-    logoType: 'crown',
-    customLogoUrl: '',
-    burstColor: 'orange',
-    bgTheme: 'ice-blue'
+    unit: '/kg'
   },
   {
+    ...DEFAULT_CARD,
     id: 5,
     title: 'Kycklingfilé',
     origin: 'Danmark',
     showFlag: false,
     flagEmoji: '🇩🇰',
-    showHalal: true,
-    halalStyle: 'classic',
     priceInt: '89',
     priceDec: '90',
-    unit: '/kg',
-    companyName: 'KÖTTHALLEN',
-    companySub: '',
-    logoType: 'crown',
-    customLogoUrl: '',
-    burstColor: 'orange',
-    bgTheme: 'ice-blue'
+    unit: '/kg'
   },
   {
+    ...DEFAULT_CARD,
     id: 6,
     title: 'Lammstek',
     origin: 'Nya Zeeland',
     showFlag: false,
     flagEmoji: '🇳🇿',
-    showHalal: true,
-    halalStyle: 'classic',
     priceInt: '169',
     priceDec: '00',
-    unit: '/kg',
-    companyName: 'KÖTTHALLEN',
-    companySub: '',
-    logoType: 'crown',
-    customLogoUrl: '',
-    burstColor: 'orange',
-    bgTheme: 'ice-blue'
+    unit: '/kg'
   },
   {
+    ...DEFAULT_CARD,
     id: 7,
     title: 'Blandfärs',
     origin: 'Sverige',
     showFlag: true,
     flagEmoji: '🇸🇪',
-    showHalal: true,
-    halalStyle: 'classic',
     priceInt: '79',
     priceDec: '90',
-    unit: '/kg',
-    companyName: 'KÖTTHALLEN',
-    companySub: '',
-    logoType: 'crown',
-    customLogoUrl: '',
-    burstColor: 'orange',
-    bgTheme: 'ice-blue'
+    unit: '/kg'
   },
   {
+    ...DEFAULT_CARD,
     id: 8,
     title: 'Ryggbiff',
     origin: 'Sverige',
     showFlag: true,
     flagEmoji: '🇸🇪',
-    showHalal: true,
-    halalStyle: 'classic',
     priceInt: '199',
     priceDec: '00',
-    unit: '/kg',
-    companyName: 'KÖTTHALLEN',
-    companySub: '',
-    logoType: 'crown',
-    customLogoUrl: '',
-    burstColor: 'orange',
-    bgTheme: 'ice-blue'
+    unit: '/kg'
   }
 ];
 

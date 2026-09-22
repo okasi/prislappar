@@ -437,7 +437,7 @@ function getCircleSvgContent(colors, burstColor, isWhite) {
 /**
  * Main dispatcher for price illustrations based on shape & color
  */
-export function getPriceIllustrationSvg(shape = 'starburst', burstColor = 'orange') {
+export function getPriceIllustrationSvg(shape = 'sunburst', burstColor = 'orange') {
   const colors = COLOR_MAP[burstColor] || COLOR_MAP.orange;
   const isWhite = burstColor === 'mono-white';
 
@@ -476,21 +476,26 @@ export function getStarburstSvg(burstColor = 'orange') {
 /**
  * Dynamic Font Size Calculation so names like "Lammframdel" NEVER break lines!
  */
-export function getTitleFontSizeStyle(title = '', sizePref = 'auto') {
+export function getTitleFontSizeStyle(title = '', sizePref = '22pt') {
   const len = (title || '').trim().length;
 
-  if (sizePref === 'xlarge') return 'font-size: 24pt; letter-spacing: -0.025em;';
-  if (sizePref === 'large') return 'font-size: 20pt; letter-spacing: -0.02em;';
+  if (sizePref === 'xlarge' || sizePref === '24pt') return 'font-size: 24pt; letter-spacing: -0.025em;';
+  if (sizePref === '22pt' || sizePref === 'default' || !sizePref) return 'font-size: 22pt; letter-spacing: -0.02em;';
+  if (sizePref === 'large' || sizePref === '20pt') return 'font-size: 20pt; letter-spacing: -0.02em;';
 
   // Fallbacks for legacy/stored configurations
   if (sizePref === 'medium' || sizePref === 'small') return 'font-size: 20pt; letter-spacing: -0.02em;';
 
-  // Auto sizing algorithm tuned specifically so "Lammframdel", "Kalvframdel", etc. fit in 1 line
-  if (len <= 8) return 'font-size: 20pt; letter-spacing: -0.02em;';
-  if (len <= 11) return 'font-size: 16.5pt; letter-spacing: -0.03em;'; // Perfect for "Lammframdel" (11 chars)
-  if (len <= 14) return 'font-size: 14.5pt; letter-spacing: -0.035em;';
-  if (len <= 18) return 'font-size: 13pt; letter-spacing: -0.04em;';
-  return 'font-size: 11.5pt; letter-spacing: -0.04em;';
+  // Auto sizing algorithm if explicitly chosen ('auto')
+  if (sizePref === 'auto') {
+    if (len <= 8) return 'font-size: 20pt; letter-spacing: -0.02em;';
+    if (len <= 11) return 'font-size: 16.5pt; letter-spacing: -0.03em;'; // Perfect for "Lammframdel" (11 chars)
+    if (len <= 14) return 'font-size: 14.5pt; letter-spacing: -0.035em;';
+    if (len <= 18) return 'font-size: 13pt; letter-spacing: -0.04em;';
+    return 'font-size: 11.5pt; letter-spacing: -0.04em;';
+  }
+
+  return 'font-size: 22pt; letter-spacing: -0.02em;';
 }
 
 /**
@@ -603,7 +608,7 @@ export function renderCardHtml(card, index = 0, isSelected = false, globalMonoch
   const monoClass = isMono ? 'is-monochrome' : '';
   const burstColor = globalMonochrome ? (card.burstColor === 'mono-white' ? 'mono-white' : 'mono') : (card.burstColor || 'orange');
   const priceColorClass = burstColor === 'mono' ? 'price-theme-white-on-black' : (burstColor === 'mono-white' ? 'price-theme-black-on-white' : 'price-theme-yellow');
-  const priceShape = card.priceShape || 'starburst';
+  const priceShape = card.priceShape || 'sunburst';
 
   // Determine logo HTML
   let logoHtml = '';
