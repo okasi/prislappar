@@ -491,7 +491,7 @@ function syncFormFromActiveCard() {
   if (toggleShowMargins) toggleShowMargins.checked = state.showMarginsGuide;
 
   btnToggleGuides.classList.toggle('active', state.showCutLines);
-  btnToggleMono.classList.toggle('active', state.globalMonochrome);
+  if (btnToggleMono) btnToggleMono.classList.toggle('active', state.globalMonochrome);
 }
 
 /**
