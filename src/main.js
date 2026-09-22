@@ -81,51 +81,16 @@ const zoomPercentage = document.getElementById('zoom-percentage');
 const btnToggleGuides = document.getElementById('btn-toggle-guides');
 const btnToggleMono = document.getElementById('btn-toggle-mono');
 
-// Share / URL State Buttons
-const btnShareLink = document.getElementById('btn-share-link');
-const btnShareLinkTop = document.getElementById('btn-share-link-top');
-const toastNotification = document.getElementById('toast-notification');
-
-/** Show a temporary toast notification */
-let _toastTimer = null;
-function showToast(msg) {
-  if (!toastNotification) return;
-  toastNotification.textContent = msg;
-  toastNotification.classList.add('toast-visible');
-  clearTimeout(_toastTimer);
-  _toastTimer = setTimeout(() => {
-    toastNotification.classList.remove('toast-visible');
-  }, 2800);
-}
-
-/** Copy the current state as a shareable URL to the clipboard */
-function copyShareLink() {
-  const encoded = encodeStateToParam(state);
-  const url = new URL(window.location.href);
-  url.search = ''; // clear existing params
-  url.searchParams.set('s', encoded);
-  // Remove nocache/test params
-  url.searchParams.delete('nocache');
-
-  const shareUrl = url.toString();
-
-  // Flash both share buttons green
-  [btnShareLink, btnShareLinkTop].forEach(btn => {
-    if (!btn) return;
-    btn.classList.add('btn-share-copied');
-    setTimeout(() => btn.classList.remove('btn-share-copied'), 1800);
-  });
-
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(shareUrl).then(() => {
-      const t = getI18n(state.lang);
-      showToast(t.linkCopied || 'Länk kopierad! 📋');
-    }).catch(() => {
-      // Fallback: show URL in prompt
-      prompt('Kopiera delningslänken:', shareUrl);
-    });
-  } else {
-    prompt('Kopiera delningslänken:', shareUrl);
+/** Silently update the browser URL to reflect current state — no page reload */
+function syncUrlParam() {
+  try {
+    const encoded = encodeStateToParam(state);
+    const url = new URL(window.location.href);
+    url.searchParams.set('s', encoded);
+    url.searchParams.delete('nocache');
+    history.replaceState(null, '', url.toString());
+  } catch {
+    // Non-critical — ignore if replaceState fails (e.g. cross-origin)
   }
 }
 
@@ -219,7 +184,7 @@ function initCardsState() {
 }
 
 /**
- * Save state to localStorage
+ * Save state to localStorage and silently sync URL param
  */
 function persistState() {
   localStorage.setItem('butcher_cards_state', JSON.stringify({
@@ -231,6 +196,7 @@ function persistState() {
     globalMonochrome: state.globalMonochrome,
     cards: state.cards
   }));
+  syncUrlParam();
 }
 
 /**
@@ -797,11 +763,6 @@ function setupEventListeners() {
   btnPrintSheet.addEventListener('click', () => {
     printSheet();
   });
-
-  // Share link (both sidebar button + top toolbar button)
-  function handleShareClick() { copyShareLink(); }
-  if (btnShareLink) btnShareLink.addEventListener('click', handleShareClick);
-  if (btnShareLinkTop) btnShareLinkTop.addEventListener('click', handleShareClick);
 
   btnExportSheet.addEventListener('click', async () => {
     try {
