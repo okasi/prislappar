@@ -125,7 +125,7 @@ export const DEMO_PRESET_ITEMS = [
   {
     ...DEFAULT_CARD,
     id: 7,
-    title: 'Blandfärs',
+    title: 'Nötfärs',
     origin: 'Sverige',
     showFlag: true,
     flagEmoji: '🇸🇪',

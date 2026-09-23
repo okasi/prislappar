@@ -19,7 +19,7 @@ En modern, webbaserad generator för butiks- och charkprislappar anpassad för *
   - Välj mellan kort 1–8 via flikarna i sidopanelen.
   - **Kopiera till alla**: Applicera aktuell produkt på hela arket med ett klick.
   - **Branding till alla**: Sprid butiksnamn och logo till samtliga 8 lappar utan att skriva över produktnamn och priser.
-  - **Chark-exempel**: Ladda in autentiska charkprodukter (*Kalvframdel, Högrev, Oxfilé, Entrecôte, Kycklingfilé, Lammstek, Blandfärs, Ryggbiff*).
+  - **Chark-exempel**: Ladda in autentiska charkprodukter (*Kalvframdel, Högrev, Oxfilé, Entrecôte, Kycklingfilé, Lammstek, Nötfärs, Ryggbiff*).
 - **Skriv Ut & Exportera**:
   - **Direktutskrift (Print to A4 / PDF)**: Optimerad `@media print` och `@page { size: A4 portrait; margin: 0; }` för kantfri utskrift på exakt 1 sida utan vita överloppssidor.
   - **Streckade klipplinjer**: Valbara klippanvisningar för enkel tillskärning med sax eller skärmaskin.
