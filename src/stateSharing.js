@@ -41,6 +41,7 @@ export function encodeStateToParam(state) {
   const payload = {
     v: 1,
     g: state.gridType || '2x4',
+    so: state.sheetOrientation === 'landscape' ? 'landscape' : 'portrait',
     m: state.sheetMargin || '5mm',
     p: state.sheetGap || '0mm',
     cl: state.showCutLines ? 1 : 0,
@@ -120,6 +121,7 @@ export function decodeStateFromParam(encodedStr) {
 
       return {
         gridType: data.g || '2x4',
+        sheetOrientation: data.so === 'landscape' ? 'landscape' : 'portrait',
         sheetMargin: data.m || '5mm',
         sheetGap: data.p || '0mm',
         showCutLines: data.cl !== undefined ? data.cl === 1 : true,
@@ -135,6 +137,7 @@ export function decodeStateFromParam(encodedStr) {
     if (Array.isArray(data.cards) && data.cards.length > 0) {
       return {
         gridType: data.gridType || '2x4',
+        sheetOrientation: data.sheetOrientation === 'landscape' ? 'landscape' : 'portrait',
         sheetMargin: data.sheetMargin || '5mm',
         sheetGap: data.sheetGap || '0mm',
         showCutLines: data.showCutLines ?? true,

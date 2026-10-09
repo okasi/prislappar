@@ -17,11 +17,11 @@ window.addEventListener = (type, listener, ...rest) => {
   return originalAddEventListener(type, listener, ...rest);
 };
 
-async function bootApp({ width = 1024 } = {}) {
+async function bootApp({ width = 1024, url = '/' } = {}) {
   // Arrange
   vi.resetModules();
   localStorage.clear();
-  history.replaceState(null, '', '/'); // drop ?s= state from earlier tests
+  history.replaceState(null, '', url); // drop or restore shared state
   while (domContentLoadedListeners.length) {
     window.removeEventListener('DOMContentLoaded', domContentLoadedListeners.pop());
   }
@@ -208,6 +208,35 @@ describe('card management', () => {
     expect(document.getElementById('a4-sheet').className).toContain('grid-1x3');
     expect(cardElements()).toHaveLength(3);
     expect(indicator()).toBe('Lapp #3 av 3 (max 3)'); // active clamps to the last surviving card
+  });
+
+  test('supports large signs, caps slots, and restores landscape from a shared link', async () => {
+    await bootApp();
+    document.getElementById('btn-layout-1x2').click();
+    const sheet = document.getElementById('a4-sheet');
+    expect(emptySlots()).toHaveLength(1);
+    expect(Number(sheet.style.getPropertyValue('--card-scale'))).toBe(2);
+    document.getElementById('btn-add-card').click();
+    document.getElementById('btn-add-card').click();
+    expect(cardElements()).toHaveLength(2);
+
+    document.getElementById('btn-layout-1x1').click();
+    expect(cardElements()).toHaveLength(1);
+    expect(emptySlots()).toHaveLength(0);
+    const orientation = document.getElementById('select-sheet-orientation');
+    orientation.value = 'landscape';
+    orientation.dispatchEvent(new Event('change'));
+    expect(document.documentElement.style.getPropertyValue('--sheet-width')).toBe('297mm');
+    expect(document.documentElement.style.getPropertyValue('--sheet-height')).toBe('210mm');
+    expect([...document.head.querySelectorAll('style')].some(el => el.textContent.includes('A4 landscape'))).toBe(true);
+    expect(JSON.parse(localStorage.getItem('butcher_cards_state')).sheetOrientation).toBe('landscape');
+
+    const sharedUrl = window.location.href;
+    await bootApp({ url: sharedUrl });
+    expect(document.getElementById('select-sheet-orientation').value).toBe('landscape');
+    expect(document.getElementById('btn-layout-1x1').classList.contains('active')).toBe(true);
+    expect(cardElements()).toHaveLength(1);
+    expect(document.documentElement.style.getPropertyValue('--sheet-width')).toBe('297mm');
   });
 
   test('prints the sheet through the browser print dialog', async () => {

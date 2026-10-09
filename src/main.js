@@ -7,6 +7,7 @@ import { encodeStateToParam, decodeStateFromParam } from './stateSharing.js';
 const state = {
   lang: localStorage.getItem('butcher_lang') || 'sv',
   gridType: '2x4',
+  sheetOrientation: 'portrait',
   activeCardIndex: 0,
   showCutLines: true,
   showMarginsGuide: false,
@@ -27,8 +28,9 @@ const slotPillsContainer = document.getElementById('slot-pills-container');
 const activeSlotIndicator = document.getElementById('active-slot-indicator');
 const btnAddCard = document.getElementById('btn-add-card');
 const btnDeleteCard = document.getElementById('btn-delete-card');
-const btnLayout2x4 = document.getElementById('btn-layout-2x4');
-const btnLayout1x3 = document.getElementById('btn-layout-1x3');
+const selectSheetOrientation = document.getElementById('select-sheet-orientation');
+const printPageStyle = document.createElement('style');
+document.head.appendChild(printPageStyle);
 
 // Inputs
 const inputTitle = document.getElementById('input-title');
@@ -103,6 +105,7 @@ function initCardsState() {
     const decoded = decodeStateFromParam(urlState);
     if (decoded && Array.isArray(decoded.cards) && decoded.cards.length > 0) {
       state.gridType = decoded.gridType || '2x4';
+      state.sheetOrientation = decoded.sheetOrientation === 'landscape' ? 'landscape' : 'portrait';
       state.sheetMargin = decoded.sheetMargin || '5mm';
       state.sheetGap = decoded.sheetGap || '0mm';
       state.showCutLines = decoded.showCutLines ?? true;
@@ -125,6 +128,7 @@ function initCardsState() {
     // Cleanly initialize with 1 card without halal on company branding
     state.cards = [ JSON.parse(JSON.stringify(DEFAULT_CARD)) ];
     state.gridType = '2x4';
+    state.sheetOrientation = 'portrait';
     localStorage.setItem(versionKey, 'true');
     persistState();
     return;
@@ -135,6 +139,7 @@ function initCardsState() {
     try {
       const parsed = JSON.parse(saved);
       state.gridType = parsed.gridType || '2x4';
+      state.sheetOrientation = parsed.sheetOrientation === 'landscape' ? 'landscape' : 'portrait';
       state.showCutLines = parsed.showCutLines ?? true;
       state.showMarginsGuide = parsed.showMarginsGuide ?? false;
       state.sheetMargin = parsed.sheetMargin || '5mm';
@@ -186,6 +191,7 @@ function initCardsState() {
 function persistState() {
   localStorage.setItem('butcher_cards_state', JSON.stringify({
     gridType: state.gridType,
+    sheetOrientation: state.sheetOrientation,
     showCutLines: state.showCutLines,
     showMarginsGuide: state.showMarginsGuide,
     sheetMargin: state.sheetMargin,
@@ -324,6 +330,21 @@ function renderSheet() {
   const config = GRID_CONFIGS[state.gridType] || GRID_CONFIGS['2x4'];
   const maxCount = config.count;
   const t = getI18n(state.lang);
+
+  const landscape = state.sheetOrientation === 'landscape';
+  const width = landscape ? 297 : 210;
+  const height = landscape ? 210 : 297;
+  document.documentElement.style.setProperty('--sheet-width', `${width}mm`);
+  document.documentElement.style.setProperty('--sheet-height', `${height}mm`);
+  printPageStyle.textContent = `@page { size: A4 ${state.sheetOrientation}; margin: 0; }`;
+
+  // Scale all artwork and text together on the large sign layouts.
+  const margin = parseFloat(state.sheetMargin);
+  const gap = parseFloat(state.sheetGap);
+  const cardWidth = (width - 2 * margin - (config.cols - 1) * gap) / config.cols;
+  const cardHeight = (height - 2 * margin - (config.rows - 1) * gap) / config.rows;
+  const largeSign = state.gridType === '1x1' || state.gridType === '1x2';
+  a4Sheet.style.setProperty('--card-scale', largeSign ? Math.min(cardWidth / 100, cardHeight / 71.75) : 1);
 
   // Set CSS grid variables for responsive margins & gaps
   a4Sheet.style.setProperty('--sheet-margin', state.sheetMargin);
@@ -486,6 +507,10 @@ function syncFormFromActiveCard() {
   // Theme, Margins & Grid (if present)
   if (selectBgTheme) selectBgTheme.value = card.bgTheme || 'ice-blue';
   if (selectGridType) selectGridType.value = state.gridType;
+  selectSheetOrientation.value = state.sheetOrientation;
+  document.querySelectorAll('.layout-pill-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.grid === state.gridType);
+  });
   if (selectSheetMargin) selectSheetMargin.value = state.sheetMargin;
   if (selectSheetGap) selectSheetGap.value = state.sheetGap;
   if (toggleGlobalMono) toggleGlobalMono.checked = state.globalMonochrome;
@@ -627,13 +652,15 @@ function setupEventListeners() {
     });
   }
 
-  // Quick Layout Switcher Buttons (2x4 vs 1x3)
-  if (btnLayout2x4) {
-    btnLayout2x4.addEventListener('click', () => setGridType('2x4'));
-  }
-  if (btnLayout1x3) {
-    btnLayout1x3.addEventListener('click', () => setGridType('1x3'));
-  }
+  document.querySelectorAll('.layout-pill-btn').forEach(btn => {
+    btn.addEventListener('click', () => setGridType(btn.dataset.grid));
+  });
+  selectSheetOrientation.addEventListener('change', (e) => {
+    state.sheetOrientation = e.target.value === 'landscape' ? 'landscape' : 'portrait';
+    persistState();
+    renderSheet();
+    autoFitZoom();
+  });
 
   // Add Card & Delete Card
   if (btnAddCard) {
@@ -856,8 +883,9 @@ function autoFitZoom() {
   const viewport = document.getElementById('viewport-stage');
   if (!viewport) return;
 
-  const approxA4HeightPx = 1122; // 297mm @ 96 DPI
-  const approxA4WidthPx = 794;   // 210mm @ 96 DPI
+  const landscape = state.sheetOrientation === 'landscape';
+  const approxA4HeightPx = landscape ? 794 : 1122;
+  const approxA4WidthPx = landscape ? 1122 : 794;
 
   const availableHeight = Math.max((viewport.clientHeight || window.innerHeight - 80) - 70, 200);
   const availableWidth = Math.max((viewport.clientWidth || window.innerWidth) - 20, 260);

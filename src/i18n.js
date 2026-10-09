@@ -4,6 +4,9 @@
  */
 export const TRANSLATIONS = {
   sv: {
+    sheetOrientation: 'Sidorientering',
+    portrait: 'Stående',
+    landscape: 'Liggande',
     // Header & App Brand
     brandTitle: 'PRISLAPPAR',
     brandTag: 'A4 MALL',
@@ -132,6 +135,9 @@ export const TRANSLATIONS = {
   },
 
   tr: {
+    sheetOrientation: 'Sayfa yönü',
+    portrait: 'Dikey',
+    landscape: 'Yatay',
     // Header & App Brand
     brandTitle: 'PRISLAPPAR',
     brandTag: 'A4 ŞABLONU',
@@ -260,6 +266,9 @@ export const TRANSLATIONS = {
   },
 
   en: {
+    sheetOrientation: 'Page orientation',
+    portrait: 'Portrait',
+    landscape: 'Landscape',
     // Header & App Brand
     brandTitle: 'PRISLAPPAR',
     brandTag: 'A4 TEMPLATE',

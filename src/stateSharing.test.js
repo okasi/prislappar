@@ -49,6 +49,15 @@ describe('stateSharing URL param codec', () => {
     });
   });
 
+  test('preserves landscape and defaults older shared links to portrait', () => {
+    const landscape = { ...stateWith(), gridType: '1x2', sheetOrientation: 'landscape' };
+    expect(decodeStateFromParam(encodeStateToParam(landscape))).toMatchObject({
+      gridType: '1x2', sheetOrientation: 'landscape'
+    });
+    expect(decodeStateFromParam('{"g":"1x1","c":[{"t":"Poster"}]}').sheetOrientation).toBe('portrait');
+    expect(decodeStateFromParam('{"sheetOrientation":"landscape","cards":[{"title":"Poster"}]}').sheetOrientation).toBe('landscape');
+  });
+
   test('round-trips a data-URI logo with base64 special characters', () => {
     // Arrange
     const state = stateWith({ logoType: 'custom', customLogoUrl: 'data:image/png;base64,iVBOR+KG/x8A==' });
