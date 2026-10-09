@@ -168,3 +168,13 @@ export const GAP_PRESETS = {
   'gap-2': { gap: '2mm', label: '2 mm (Tydlig distans mellan kort)' },
   'gap-4': { gap: '4mm', label: '4 mm (Rymlig distans)' }
 };
+
+// Map older saved sizes to the nearest current choice, capped at 40pt.
+export function normalizeTitleSize(sizePref) {
+  const legacySizes = { large: 20, small: 20, medium: 20, xlarge: 24 };
+  const requested = legacySizes[sizePref] ?? parseFloat(sizePref);
+  const sizes = [20, 22, 28, 32, 40];
+  if (!Number.isFinite(requested)) return '22pt';
+  return `${sizes.reduce((best, size) =>
+    Math.abs(size - requested) < Math.abs(best - requested) ? size : best)}pt`;
+}

@@ -121,16 +121,11 @@ describe('getTitleFontSizeStyle', () => {
     expect(getTitleFontSizeStyle('Kalvframdel')).toContain('font-size: 22pt');
   });
 
-  test('auto mode scales the font down as the title grows', () => {
-    // Arrange & Act
-    const short = getTitleFontSizeStyle('Kött', 'auto');
-    const medium = getTitleFontSizeStyle('Lammframdel', 'auto');
-    const veryLong = getTitleFontSizeStyle('Färsblandning med tryffel', 'auto');
-
-    // Assert
-    expect(short).toContain('font-size: 20pt');
-    expect(medium).toContain('font-size: 16.5pt');
-    expect(veryLong).toContain('font-size: 11.5pt');
+  test('maps old sizes to the current choices and caps oversized saved titles', () => {
+    expect(getTitleFontSizeStyle('Kalv', '72pt')).toContain('font-size: 40pt');
+    expect(getTitleFontSizeStyle('Kalv', '36pt')).toContain('font-size: 32pt');
+    expect(getTitleFontSizeStyle('Kalv', 'xlarge')).toContain('font-size: 22pt');
+    expect(getTitleFontSizeStyle('Kalv', 'auto')).toContain('font-size: 22pt');
   });
 });
 

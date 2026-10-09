@@ -1,3 +1,5 @@
+import { normalizeTitleSize } from './presets.js';
+
 /**
  * Color map shared across all price background illustrations
  */
@@ -474,32 +476,11 @@ export function getStarburstSvg(burstColor = 'orange') {
 }
 
 /**
- * Dynamic Font Size Calculation so names like "Lammframdel" NEVER break lines!
+ * Resolve title typography from the five supported sizes.
  */
 export function getTitleFontSizeStyle(title = '', sizePref = '22pt') {
-  const len = (title || '').trim().length;
-
-  if (['28pt', '32pt', '36pt', '40pt', '48pt', '60pt', '72pt'].includes(sizePref)) {
-    return `font-size: ${sizePref}; letter-spacing: -0.025em;`;
-  }
-
-  if (sizePref === 'xlarge' || sizePref === '24pt') return 'font-size: 24pt; letter-spacing: -0.025em;';
-  if (sizePref === '22pt' || sizePref === 'default' || !sizePref) return 'font-size: 22pt; letter-spacing: -0.02em;';
-  if (sizePref === 'large' || sizePref === '20pt') return 'font-size: 20pt; letter-spacing: -0.02em;';
-
-  // Fallbacks for legacy/stored configurations
-  if (sizePref === 'medium' || sizePref === 'small') return 'font-size: 20pt; letter-spacing: -0.02em;';
-
-  // Auto sizing algorithm if explicitly chosen ('auto')
-  if (sizePref === 'auto') {
-    if (len <= 8) return 'font-size: 20pt; letter-spacing: -0.02em;';
-    if (len <= 11) return 'font-size: 16.5pt; letter-spacing: -0.03em;'; // Perfect for "Lammframdel" (11 chars)
-    if (len <= 14) return 'font-size: 14.5pt; letter-spacing: -0.035em;';
-    if (len <= 18) return 'font-size: 13pt; letter-spacing: -0.04em;';
-    return 'font-size: 11.5pt; letter-spacing: -0.04em;';
-  }
-
-  return 'font-size: 22pt; letter-spacing: -0.02em;';
+  const size = normalizeTitleSize(sizePref);
+  return `font-size: ${size}; letter-spacing: -0.025em;`;
 }
 
 /**

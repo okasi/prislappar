@@ -1,4 +1,4 @@
-import { COUNTRIES, DEFAULT_BRANDING, GRID_CONFIGS, DEMO_PRESET_ITEMS, DEFAULT_CARD } from './presets.js';
+import { COUNTRIES, DEFAULT_BRANDING, GRID_CONFIGS, DEMO_PRESET_ITEMS, DEFAULT_CARD, normalizeTitleSize } from './presets.js';
 import { renderCardHtml } from './cardRenderer.js';
 import { getI18n } from './i18n.js';
 import { encodeStateToParam, decodeStateFromParam } from './stateSharing.js';
@@ -472,7 +472,7 @@ function syncFormFromActiveCard() {
   if (!card) return;
 
   inputTitle.value = card.title || '';
-  selectTitleSize.value = card.titleSize || '22pt';
+  selectTitleSize.value = normalizeTitleSize(card.titleSize);
   inputPriceInt.value = card.priceInt || '';
   inputPriceDec.value = card.priceDec || '';
   inputUnit.value = card.unit || '/kg';
@@ -910,6 +910,7 @@ function autoFitZoom() {
 function main() {
   populateCountryDropdown();
   initCardsState();
+  state.cards.forEach(card => { card.titleSize = normalizeTitleSize(card.titleSize); });
   renderSheet();
   renderSlotPills();
   syncFormFromActiveCard();
