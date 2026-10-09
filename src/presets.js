@@ -48,6 +48,7 @@ export const DEFAULT_CARD = {
   flagEmoji: '🇱🇹',
   showHalal: true,
   halalStyle: 'classic', // 'classic', 'gold', 'green'
+  priceSize: 'large',
   priceInt: '69',
   priceDec: '90',
   unit: '/kg',
@@ -177,4 +178,16 @@ export function normalizeTitleSize(sizePref) {
   if (!Number.isFinite(requested)) return '22pt';
   return `${sizes.reduce((best, size) =>
     Math.abs(size - requested) < Math.abs(best - requested) ? size : best)}pt`;
+}
+
+export const PRICE_SIZES = {
+  small: 0.7,
+  medium: 0.85,
+  large: 1,
+  xlarge: 1.1,
+  xxlarge: 1.2
+};
+
+export function normalizePriceSize(size) {
+  return Object.hasOwn(PRICE_SIZES, size) ? size : 'large';
 }

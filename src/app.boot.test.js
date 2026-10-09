@@ -239,6 +239,26 @@ describe('card management', () => {
     expect(document.documentElement.style.getPropertyValue('--sheet-width')).toBe('297mm');
   });
 
+  test('keeps price size per card, inherits it on new cards, and restores it from links', async () => {
+    await bootApp();
+    const sizeSelect = document.getElementById('select-price-size');
+    expect(sizeSelect.options).toHaveLength(5);
+    expect(sizeSelect.value).toBe('large');
+    sizeSelect.value = 'xxlarge';
+    sizeSelect.dispatchEvent(new Event('change'));
+    expect(document.querySelector('.price-display').style.getPropertyValue('--price-size-scale')).toBe('1.2');
+    expect(JSON.parse(localStorage.getItem('butcher_cards_state')).cards[0].priceSize).toBe('xxlarge');
+    document.getElementById('btn-add-card').click();
+    expect(document.getElementById('select-price-size').value).toBe('xxlarge');
+    sizeSelect.value = 'small';
+    sizeSelect.dispatchEvent(new Event('change'));
+    document.getElementById('card-item-0').click();
+    expect(sizeSelect.value).toBe('xxlarge');
+    const sharedUrl = window.location.href;
+    await bootApp({ url: sharedUrl });
+    expect([...document.querySelectorAll('.price-display')].map(el => el.style.getPropertyValue('--price-size-scale'))).toEqual(['1.2', '0.7']);
+  });
+
   test('prints the sheet through the browser print dialog', async () => {
     // Arrange
     await bootApp();

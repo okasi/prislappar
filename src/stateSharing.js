@@ -58,6 +58,7 @@ export function encodeStateToParam(state) {
       if (c.flagEmoji && c.flagEmoji !== '🇱🇹') item.fe = c.flagEmoji;
       if (c.showHalal === false) item.h = 0;
       if (c.halalStyle && c.halalStyle !== 'classic') item.hs = c.halalStyle;
+      if (c.priceSize && c.priceSize !== 'large') item.pz = c.priceSize;
       if (c.priceInt) item.pi = c.priceInt;
       if (c.priceDec) item.pd = c.priceDec;
       if (c.unit && c.unit !== '/kg') item.u = c.unit;
@@ -107,6 +108,7 @@ export function decodeStateFromParam(encodedStr) {
         flagEmoji: item.fe || (item.f ? '🇸🇪' : DEFAULT_CARD.flagEmoji),
         showHalal: item.h !== undefined ? item.h === 1 : DEFAULT_CARD.showHalal,
         halalStyle: item.hs || DEFAULT_CARD.halalStyle,
+        priceSize: item.pz || DEFAULT_CARD.priceSize,
         priceInt: item.pi !== undefined ? item.pi : DEFAULT_CARD.priceInt,
         priceDec: item.pd !== undefined ? item.pd : DEFAULT_CARD.priceDec,
         unit: item.u || DEFAULT_CARD.unit,

@@ -1,4 +1,4 @@
-import { COUNTRIES, DEFAULT_BRANDING, GRID_CONFIGS, DEMO_PRESET_ITEMS, DEFAULT_CARD, normalizeTitleSize } from './presets.js';
+import { COUNTRIES, DEFAULT_BRANDING, GRID_CONFIGS, DEMO_PRESET_ITEMS, DEFAULT_CARD, normalizeTitleSize, normalizePriceSize } from './presets.js';
 import { renderCardHtml } from './cardRenderer.js';
 import { getI18n } from './i18n.js';
 import { encodeStateToParam, decodeStateFromParam } from './stateSharing.js';
@@ -35,6 +35,7 @@ document.head.appendChild(printPageStyle);
 // Inputs
 const inputTitle = document.getElementById('input-title');
 const selectTitleSize = document.getElementById('select-title-size');
+const selectPriceSize = document.getElementById('select-price-size');
 const inputPriceInt = document.getElementById('input-price-int');
 const inputPriceDec = document.getElementById('input-price-dec');
 const inputUnit = document.getElementById('input-unit');
@@ -228,6 +229,7 @@ function addNewCard() {
     halalStyle: activeCard.halalStyle || 'classic',
     bgTheme: activeCard.bgTheme || 'ice-blue',
     titleSize: activeCard.titleSize || '22pt',
+    priceSize: normalizePriceSize(activeCard.priceSize),
     priceShape: activeCard.priceShape || 'sunburst',
     burstColor: activeCard.burstColor || 'orange'
   };
@@ -473,6 +475,7 @@ function syncFormFromActiveCard() {
 
   inputTitle.value = card.title || '';
   selectTitleSize.value = normalizeTitleSize(card.titleSize);
+  selectPriceSize.value = normalizePriceSize(card.priceSize);
   inputPriceInt.value = card.priceInt || '';
   inputPriceDec.value = card.priceDec || '';
   inputUnit.value = card.unit || '/kg';
@@ -557,6 +560,7 @@ function setupEventListeners() {
   // Item & Pricing
   inputTitle.addEventListener('input', (e) => updateActiveCard({ title: e.target.value }));
   selectTitleSize.addEventListener('change', (e) => updateActiveCard({ titleSize: e.target.value }));
+  selectPriceSize.addEventListener('change', (e) => updateActiveCard({ priceSize: e.target.value }));
   inputPriceInt.addEventListener('input', (e) => updateActiveCard({ priceInt: e.target.value }));
   inputPriceDec.addEventListener('input', (e) => updateActiveCard({ priceDec: e.target.value }));
   inputUnit.addEventListener('change', (e) => updateActiveCard({ unit: e.target.value }));

@@ -1,4 +1,4 @@
-import { normalizeTitleSize } from './presets.js';
+import { normalizeTitleSize, PRICE_SIZES, normalizePriceSize } from './presets.js';
 
 /**
  * Color map shared across all price background illustrations
@@ -593,6 +593,8 @@ export function renderCardHtml(card, index = 0, isSelected = false, globalMonoch
   const monoClass = isMono ? 'is-monochrome' : '';
   const burstColor = globalMonochrome ? (card.burstColor === 'mono-white' ? 'mono-white' : 'mono') : (card.burstColor || 'orange');
   const priceColorClass = burstColor === 'mono' ? 'price-theme-white-on-black' : (burstColor === 'mono-white' ? 'price-theme-black-on-white' : 'price-theme-yellow');
+  const priceSize = normalizePriceSize(card.priceSize);
+  const priceScale = PRICE_SIZES[priceSize];
   const priceShape = card.priceShape || 'sunburst';
 
   // Determine logo HTML
@@ -658,7 +660,7 @@ export function renderCardHtml(card, index = 0, isSelected = false, globalMonoch
             ${getPriceIllustrationSvg(priceShape, burstColor)}
             
             <!-- Price Overlay inside the chosen shape -->
-            <div class="price-display ${priceColorClass} ${digitsClass}">
+            <div class="price-display ${priceColorClass} ${digitsClass} price-size-${priceSize}" style="--price-size-scale: ${priceScale};">
               <span class="price-integer">${card.priceInt || '0'}</span>
               <div class="price-fraction-wrap">
                 <span class="price-decimals">${decText}</span>

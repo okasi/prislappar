@@ -1348,7 +1348,7 @@ select:focus {
   position: absolute;
   left: 50%;
   top: 50%;
-  transform: translate(-50%, -50%) rotate(-3deg);
+  transform: translate(-50%, -50%) rotate(-3deg) scale(var(--price-size-scale, 1));
   z-index: 5;
   display: flex;
   align-items: baseline;
@@ -2000,10 +2000,11 @@ select:focus {
 
 :is(.grid-1x1, .grid-1x2) .price-display {
   align-items: center;
-  transform: translate(-50%, -50%) rotate(-3deg) scale(var(--price-badge-scale));
+  transform: translate(-50%, -50%) rotate(-3deg) scale(calc(var(--price-badge-scale) * var(--price-size-scale, 1)));
 }
 
-:is(.grid-1x1, .grid-1x2) .price-fraction-wrap {
+:is(.grid-1x1, .grid-1x2) .price-fraction-wrap,
+.price-display:is(.price-size-xlarge, .price-size-xxlarge) .price-fraction-wrap {
   flex-direction: column;
   align-items: flex-start;
   gap: 3pt;
@@ -2036,4 +2037,8 @@ select:focus {
 
 :is(.grid-1x1, .grid-1x2) .price-display.price-digits-4 .price-decimals {
   font-size: 28pt !important;
+}
+
+.price-display:is(.price-size-xlarge, .price-size-xxlarge) {
+  align-items: center;
 }

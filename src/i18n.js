@@ -4,6 +4,13 @@
  */
 export const TRANSLATIONS = {
   sv: {
+    priceSize: 'Prisstorlek',
+    priceSizeSmall: 'Liten',
+    priceSizeMedium: 'Mellan',
+    priceSizeLarge: 'Stor (standard)',
+    priceSizeXLarge: 'Extra stor',
+    priceSizeXXLarge: 'Störst',
+
     sheetOrientation: 'Sidorientering',
     portrait: 'Stående',
     landscape: 'Liggande',
@@ -137,6 +144,13 @@ export const TRANSLATIONS = {
   },
 
   tr: {
+    priceSize: 'Fiyat boyutu',
+    priceSizeSmall: 'Küçük',
+    priceSizeMedium: 'Orta',
+    priceSizeLarge: 'Büyük (standart)',
+    priceSizeXLarge: 'Çok büyük',
+    priceSizeXXLarge: 'En büyük',
+
     sheetOrientation: 'Sayfa yönü',
     portrait: 'Dikey',
     landscape: 'Yatay',
@@ -270,6 +284,13 @@ export const TRANSLATIONS = {
   },
 
   en: {
+    priceSize: 'Price size',
+    priceSizeSmall: 'Small',
+    priceSizeMedium: 'Medium',
+    priceSizeLarge: 'Large (default)',
+    priceSizeXLarge: 'Extra large',
+    priceSizeXXLarge: 'Largest',
+
     sheetOrientation: 'Page orientation',
     portrait: 'Portrait',
     landscape: 'Landscape',
