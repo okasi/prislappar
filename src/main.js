@@ -1,7 +1,7 @@
-import { COUNTRIES, DEFAULT_BRANDING, GRID_CONFIGS, DEMO_PRESET_ITEMS, DEFAULT_CARD, normalizeTitleSize, normalizePriceSize } from './presets.js';
-import { renderCardHtml } from './cardRenderer.js';
-import { getI18n } from './i18n.js';
-import { encodeStateToParam, decodeStateFromParam } from './stateSharing.js';
+import { COUNTRIES, DEFAULT_BRANDING, GRID_CONFIGS, DEMO_PRESET_ITEMS, DEFAULT_CARD, normalizeTitleSize, normalizePriceSize } from './presets.js?v=20261009-price-sizes';
+import { renderCardHtml } from './cardRenderer.js?v=20261009-price-sizes';
+import { getI18n } from './i18n.js?v=20261009-price-sizes';
+import { encodeStateToParam, decodeStateFromParam } from './stateSharing.js?v=20261009-price-sizes';
 
 // Application State
 const state = {

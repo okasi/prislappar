@@ -1,4 +1,4 @@
-import { normalizeTitleSize, PRICE_SIZES, normalizePriceSize } from './presets.js';
+import { normalizeTitleSize, PRICE_SIZES, normalizePriceSize } from './presets.js?v=20261009-price-sizes';
 
 /**
  * Color map shared across all price background illustrations
