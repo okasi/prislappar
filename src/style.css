@@ -1283,7 +1283,7 @@ select:focus {
   pointer-events: none;
 }
 
-/* Fixed-size shape container: NEVER resizes or stretches regardless of price length */
+/* Scale the graphic and its price together around the badge center. */
 .starburst-container {
   width: 63mm;
   height: 55mm;
@@ -1292,6 +1292,7 @@ select:focus {
   max-width: 63mm;
   max-height: 55mm;
   flex: 0 0 63mm;
+  scale: var(--price-size-scale, 1);
   position: relative;
   display: flex;
   align-items: center;
@@ -1348,7 +1349,7 @@ select:focus {
   position: absolute;
   left: 50%;
   top: 50%;
-  transform: translate(-50%, -50%) rotate(-3deg) scale(var(--price-size-scale, 1));
+  transform: translate(-50%, -50%) rotate(-3deg);
   z-index: 5;
   display: flex;
   align-items: baseline;
@@ -2000,7 +2001,7 @@ select:focus {
 
 :is(.grid-1x1, .grid-1x2) .price-display {
   align-items: center;
-  transform: translate(-50%, -50%) rotate(-3deg) scale(calc(var(--price-badge-scale) * var(--price-size-scale, 1)));
+  transform: translate(-50%, -50%) rotate(-3deg) scale(var(--price-badge-scale));
 }
 
 :is(.grid-1x1, .grid-1x2) .price-fraction-wrap,

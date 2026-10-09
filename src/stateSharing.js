@@ -1,4 +1,4 @@
-import { DEFAULT_CARD } from './presets.js?v=20261009-price-sizes';
+import { DEFAULT_CARD } from './presets.js?v=20261009-price-graphic';
 
 /**
  * UTF-8 safe base64url encoding

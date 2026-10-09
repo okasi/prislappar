@@ -1,4 +1,4 @@
-import { normalizeTitleSize, PRICE_SIZES, normalizePriceSize } from './presets.js?v=20261009-price-sizes';
+import { normalizeTitleSize, PRICE_SIZES, normalizePriceSize } from './presets.js?v=20261009-price-graphic';
 
 /**
  * Color map shared across all price background illustrations
@@ -656,11 +656,11 @@ export function renderCardHtml(card, index = 0, isSelected = false, globalMonoch
 
         <!-- Right Section: Selected Illustration & Massive Price -->
         <div class="card-right-column">
-          <div class="starburst-container shape-${priceShape}">
+          <div class="starburst-container shape-${priceShape}" style="--price-size-scale: ${priceScale};">
             ${getPriceIllustrationSvg(priceShape, burstColor)}
             
             <!-- Price Overlay inside the chosen shape -->
-            <div class="price-display ${priceColorClass} ${digitsClass} price-size-${priceSize}" style="--price-size-scale: ${priceScale};">
+            <div class="price-display ${priceColorClass} ${digitsClass} price-size-${priceSize}">
               <span class="price-integer">${card.priceInt || '0'}</span>
               <div class="price-fraction-wrap">
                 <span class="price-decimals">${decText}</span>

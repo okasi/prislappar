@@ -246,7 +246,7 @@ describe('card management', () => {
     expect(sizeSelect.value).toBe('large');
     sizeSelect.value = 'xxlarge';
     sizeSelect.dispatchEvent(new Event('change'));
-    expect(document.querySelector('.price-display').style.getPropertyValue('--price-size-scale')).toBe('1.2');
+    expect(document.querySelector('.starburst-container').style.getPropertyValue('--price-size-scale')).toBe('1.2');
     expect(JSON.parse(localStorage.getItem('butcher_cards_state')).cards[0].priceSize).toBe('xxlarge');
     document.getElementById('btn-add-card').click();
     expect(document.getElementById('select-price-size').value).toBe('xxlarge');
@@ -256,7 +256,7 @@ describe('card management', () => {
     expect(sizeSelect.value).toBe('xxlarge');
     const sharedUrl = window.location.href;
     await bootApp({ url: sharedUrl });
-    expect([...document.querySelectorAll('.price-display')].map(el => el.style.getPropertyValue('--price-size-scale'))).toEqual(['1.2', '0.7']);
+    expect([...document.querySelectorAll('.starburst-container')].map(el => el.style.getPropertyValue('--price-size-scale'))).toEqual(['1.2', '0.7']);
   });
 
   test('prints the sheet through the browser print dialog', async () => {
