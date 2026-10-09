@@ -5,6 +5,7 @@ export const COUNTRIES = [
   { code: 'DK', name: 'Danmark', flag: '🇩🇰' },
   { code: 'IE', name: 'Irland', flag: '🇮🇪' },
   { code: 'PL', name: 'Polen', flag: '🇵🇱' },
+  { code: 'RO', name: 'Rumänien', flag: '🇷🇴' },
   { code: 'DE', name: 'Tyskland', flag: '🇩🇪' },
   { code: 'NL', name: 'Nederländerna', flag: '🇳🇱' },
   { code: 'ES', name: 'Spanien', flag: '🇪🇸' },

@@ -344,7 +344,13 @@ function renderSheet() {
   const cardWidth = (width - 2 * margin - (config.cols - 1) * gap) / config.cols;
   const cardHeight = (height - 2 * margin - (config.rows - 1) * gap) / config.rows;
   const largeSign = state.gridType === '1x1' || state.gridType === '1x2';
-  a4Sheet.style.setProperty('--card-scale', largeSign ? Math.min(cardWidth / 100, cardHeight / 71.75) : 1);
+  const cardScale = largeSign ? Math.min(cardWidth / 100, cardHeight / 71.75) : 1;
+  a4Sheet.style.setProperty('--card-scale', cardScale);
+  // Wide signs have room for a larger badge without changing the product text.
+  const badgeScale = Math.max(1, Math.min(1.3,
+    cardWidth * 0.58 / (63 * cardScale),
+    cardHeight * 0.92 / (55 * cardScale)));
+  a4Sheet.style.setProperty('--price-badge-scale', largeSign ? badgeScale : 1);
 
   // Set CSS grid variables for responsive margins & gaps
   a4Sheet.style.setProperty('--sheet-margin', state.sheetMargin);

@@ -1986,3 +1986,54 @@ select:focus {
 .layout-pill-btn {
   min-width: 48px;
 }
+
+/* Put the unit below the decimals so the price can grow inside large signs. */
+:is(.grid-1x1, .grid-1x2) .starburst-container {
+  width: calc(63mm * var(--price-badge-scale));
+  height: calc(55mm * var(--price-badge-scale));
+  min-width: calc(63mm * var(--price-badge-scale));
+  min-height: calc(55mm * var(--price-badge-scale));
+  max-width: calc(63mm * var(--price-badge-scale));
+  max-height: calc(55mm * var(--price-badge-scale));
+  flex-basis: calc(63mm * var(--price-badge-scale));
+}
+
+:is(.grid-1x1, .grid-1x2) .price-display {
+  align-items: center;
+  transform: translate(-50%, -50%) rotate(-3deg) scale(var(--price-badge-scale));
+}
+
+:is(.grid-1x1, .grid-1x2) .price-fraction-wrap {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3pt;
+  transform: none;
+}
+
+:is(.grid-1x1, .grid-1x2) .price-display .price-integer {
+  font-size: 72pt !important;
+}
+
+:is(.grid-1x1, .grid-1x2) .price-display .price-decimals {
+  font-size: 40pt !important;
+}
+
+:is(.grid-1x1, .grid-1x2) .price-display .price-unit {
+  font-size: 22pt !important;
+}
+
+:is(.grid-1x1, .grid-1x2) .price-display.price-digits-3 .price-integer {
+  font-size: 60pt !important;
+}
+
+:is(.grid-1x1, .grid-1x2) .price-display.price-digits-3 .price-decimals {
+  font-size: 34pt !important;
+}
+
+:is(.grid-1x1, .grid-1x2) .price-display.price-digits-4 .price-integer {
+  font-size: 48pt !important;
+}
+
+:is(.grid-1x1, .grid-1x2) .price-display.price-digits-4 .price-decimals {
+  font-size: 28pt !important;
+}

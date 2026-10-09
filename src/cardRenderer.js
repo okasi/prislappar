@@ -479,6 +479,10 @@ export function getStarburstSvg(burstColor = 'orange') {
 export function getTitleFontSizeStyle(title = '', sizePref = '22pt') {
   const len = (title || '').trim().length;
 
+  if (['28pt', '32pt', '36pt', '40pt', '48pt', '60pt', '72pt'].includes(sizePref)) {
+    return `font-size: ${sizePref}; letter-spacing: -0.025em;`;
+  }
+
   if (sizePref === 'xlarge' || sizePref === '24pt') return 'font-size: 24pt; letter-spacing: -0.025em;';
   if (sizePref === '22pt' || sizePref === 'default' || !sizePref) return 'font-size: 22pt; letter-spacing: -0.02em;';
   if (sizePref === 'large' || sizePref === '20pt') return 'font-size: 20pt; letter-spacing: -0.02em;';
