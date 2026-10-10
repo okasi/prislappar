@@ -1,7 +1,8 @@
-import { COUNTRIES, DEFAULT_BRANDING, GRID_CONFIGS, DEMO_PRESET_ITEMS, DEFAULT_CARD, normalizeTitleSize, normalizePriceSize } from './presets.js?v=20261009-price-graphic';
-import { renderCardHtml } from './cardRenderer.js?v=20261009-price-graphic';
-import { getI18n } from './i18n.js?v=20261009-price-graphic';
-import { encodeStateToParam, decodeStateFromParam } from './stateSharing.js?v=20261009-price-graphic';
+import { fitPriceArtwork } from './priceLayout.js?v=20261009-price-fit';
+import { COUNTRIES, DEFAULT_BRANDING, GRID_CONFIGS, DEMO_PRESET_ITEMS, DEFAULT_CARD, normalizeTitleSize, normalizePriceSize } from './presets.js?v=20261009-price-fit';
+import { renderCardHtml } from './cardRenderer.js?v=20261009-price-fit';
+import { getI18n } from './i18n.js?v=20261009-price-fit';
+import { encodeStateToParam, decodeStateFromParam } from './stateSharing.js?v=20261009-price-fit';
 
 // Application State
 const state = {
@@ -389,6 +390,7 @@ function renderSheet() {
   }
 
   a4Sheet.innerHTML = html;
+  a4Sheet.querySelectorAll('.price-card').forEach(fitPriceArtwork);
 
   // Add click listeners to cards on sheet
   a4Sheet.querySelectorAll('.price-card').forEach(bindCardClick);
@@ -548,6 +550,7 @@ function updateActiveCard(changes) {
     const newElement = tempContainer.firstElementChild;
     oldElement.replaceWith(newElement);
     bindCardClick(newElement);
+    fitPriceArtwork(newElement);
   } else {
     renderSheet();
   }
@@ -884,6 +887,7 @@ function setZoom(newZoom) {
   state.zoom = Math.min(Math.max(newZoom, 0.2), 1.8);
   document.documentElement.style.setProperty('--preview-zoom', state.zoom);
   zoomPercentage.textContent = `${Math.round(state.zoom * 100)}%`;
+  a4Sheet.querySelectorAll('.price-card').forEach(fitPriceArtwork);
 }
 
 /**
@@ -929,6 +933,7 @@ function main() {
   }
 
   autoFitZoom();
+  document.fonts?.ready.then(() => a4Sheet.querySelectorAll('.price-card').forEach(fitPriceArtwork));
 }
 
 // Start app

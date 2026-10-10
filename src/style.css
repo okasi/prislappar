@@ -1281,6 +1281,7 @@ select:focus {
   justify-content: center;
   overflow: visible;
   pointer-events: none;
+  transform: translate(var(--price-shift-x, 0px), var(--price-shift-y, 0px));
 }
 
 /* Scale the graphic and its price together around the badge center. */
@@ -1292,7 +1293,7 @@ select:focus {
   max-width: 63mm;
   max-height: 55mm;
   flex: 0 0 63mm;
-  scale: var(--price-size-scale, 1);
+  scale: calc(var(--price-size-scale, 1) * var(--price-fit-scale, 1));
   position: relative;
   display: flex;
   align-items: center;
@@ -2042,4 +2043,9 @@ select:focus {
 
 .price-display:is(.price-size-xlarge, .price-size-xxlarge) {
   align-items: center;
+}
+
+/* Bring large price badges inward; fitting keeps the complete artwork on paper. */
+:is(.grid-1x1, .grid-1x2) .card-right-column {
+  width: 70%;
 }

@@ -181,11 +181,11 @@ export function normalizeTitleSize(sizePref) {
 }
 
 export const PRICE_SIZES = {
-  small: 0.7,
-  medium: 0.85,
+  small: 0.5,
+  medium: 0.75,
   large: 1,
-  xlarge: 1.1,
-  xxlarge: 1.2
+  xlarge: 1.25,
+  xxlarge: 1.5
 };
 
 export function normalizePriceSize(size) {
