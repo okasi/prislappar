@@ -1,4 +1,4 @@
-import { normalizeTitleSize, PRICE_SIZES, normalizePriceSize } from './presets.js?v=20261009-price-fit';
+import { DEFAULT_CARD, normalizeTitleSize, PRICE_SIZES, normalizePriceSize } from './presets.js?v=20261012-blue-default';
 
 /**
  * Color map shared across all price background illustrations
@@ -591,7 +591,7 @@ export function renderCardHtml(card, index = 0, isSelected = false, globalMonoch
   const bgClass = isMono ? 'bg-monochrome' : `bg-${card.bgTheme || 'ice-blue'}`;
   const selectedClass = isSelected ? 'is-selected' : '';
   const monoClass = isMono ? 'is-monochrome' : '';
-  const burstColor = globalMonochrome ? (card.burstColor === 'mono-white' ? 'mono-white' : 'mono') : (card.burstColor || 'orange');
+  const burstColor = globalMonochrome ? (card.burstColor === 'mono-white' ? 'mono-white' : 'mono') : (card.burstColor || DEFAULT_CARD.burstColor);
   const priceColorClass = burstColor === 'mono' ? 'price-theme-white-on-black' : (burstColor === 'mono-white' ? 'price-theme-black-on-white' : 'price-theme-yellow');
   const priceSize = normalizePriceSize(card.priceSize);
   const priceScale = PRICE_SIZES[priceSize];

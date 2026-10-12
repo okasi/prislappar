@@ -56,6 +56,7 @@ describe('presets data integrity', () => {
     expect(card.titleSize).toBe('22pt');
     expect(card.priceShape).toBe('sunburst');
     expect(card.bgTheme).toBe('ice-blue');
+    expect(card.burstColor).toBe('blue');
     expect(card.companyName).toBe(DEFAULT_BRANDING.companyName);
     expect(GRID_CONFIGS['2x4'].count).toBeGreaterThanOrEqual(DEMO_PRESET_ITEMS.length);
   });

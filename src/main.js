@@ -1,8 +1,8 @@
-import { fitPriceArtwork } from './priceLayout.js?v=20261009-price-fit';
-import { COUNTRIES, DEFAULT_BRANDING, GRID_CONFIGS, DEMO_PRESET_ITEMS, DEFAULT_CARD, normalizeTitleSize, normalizePriceSize } from './presets.js?v=20261009-price-fit';
-import { renderCardHtml } from './cardRenderer.js?v=20261009-price-fit';
-import { getI18n } from './i18n.js?v=20261009-price-fit';
-import { encodeStateToParam, decodeStateFromParam } from './stateSharing.js?v=20261009-price-fit';
+import { fitPriceArtwork } from './priceLayout.js?v=20261012-blue-default';
+import { COUNTRIES, DEFAULT_BRANDING, GRID_CONFIGS, DEMO_PRESET_ITEMS, DEFAULT_CARD, normalizeTitleSize, normalizePriceSize } from './presets.js?v=20261012-blue-default';
+import { renderCardHtml } from './cardRenderer.js?v=20261012-blue-default';
+import { getI18n } from './i18n.js?v=20261012-blue-default';
+import { encodeStateToParam, decodeStateFromParam } from './stateSharing.js?v=20261012-blue-default';
 
 // Application State
 const state = {
@@ -14,7 +14,7 @@ const state = {
   showMarginsGuide: false,
   sheetMargin: '5mm',
   sheetGap: '0mm',
-  globalMonochrome: true,
+  globalMonochrome: false,
   zoom: 0.85,
   cards: []
 };
@@ -112,7 +112,7 @@ function initCardsState() {
       state.sheetGap = decoded.sheetGap || '0mm';
       state.showCutLines = decoded.showCutLines ?? true;
       state.showMarginsGuide = decoded.showMarginsGuide ?? false;
-      state.globalMonochrome = decoded.globalMonochrome ?? true;
+      state.globalMonochrome = decoded.globalMonochrome ?? false;
       state.activeCardIndex = decoded.activeCardIndex ?? 0;
       state.lang = decoded.lang || 'sv';
       state.cards = decoded.cards;
@@ -146,7 +146,7 @@ function initCardsState() {
       state.showMarginsGuide = parsed.showMarginsGuide ?? false;
       state.sheetMargin = parsed.sheetMargin || '5mm';
       state.sheetGap = parsed.sheetGap || '0mm';
-      state.globalMonochrome = parsed.globalMonochrome ?? true;
+      state.globalMonochrome = parsed.globalMonochrome ?? false;
       if (Array.isArray(parsed.cards) && parsed.cards.length > 0) {
         state.cards = parsed.cards.map(card => ({
           ...card,
@@ -232,7 +232,7 @@ function addNewCard() {
     titleSize: activeCard.titleSize || '22pt',
     priceSize: normalizePriceSize(activeCard.priceSize),
     priceShape: activeCard.priceShape || 'sunburst',
-    burstColor: activeCard.burstColor || 'orange'
+    burstColor: activeCard.burstColor || DEFAULT_CARD.burstColor
   };
 
   state.cards.push(newCard);
@@ -486,7 +486,7 @@ function syncFormFromActiveCard() {
   // Burst color
   const effectiveColor = state.globalMonochrome || card.bgTheme === 'monochrome'
     ? (card.burstColor === 'mono-white' ? 'mono-white' : 'mono')
-    : (card.burstColor || 'orange');
+    : (card.burstColor || DEFAULT_CARD.burstColor);
   burstColorOptions.querySelectorAll('.color-chip').forEach(chip => {
     if (chip.getAttribute('data-color') === effectiveColor) {
       chip.classList.add('active');

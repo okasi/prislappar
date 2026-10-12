@@ -1,4 +1,4 @@
-import { DEFAULT_CARD } from './presets.js?v=20261009-price-fit';
+import { DEFAULT_CARD } from './presets.js?v=20261012-blue-default';
 
 /**
  * UTF-8 safe base64url encoding
@@ -116,7 +116,8 @@ export function decodeStateFromParam(encodedStr) {
         companySub: item.cs !== undefined ? item.cs : DEFAULT_CARD.companySub,
         logoType: item.lt || DEFAULT_CARD.logoType,
         customLogoUrl: item.lu || '',
-        burstColor: item.bc || DEFAULT_CARD.burstColor,
+        // Version 1 links omitted orange, regardless of the current UI default.
+        burstColor: item.bc || 'orange',
         priceShape: item.ps || DEFAULT_CARD.priceShape || 'sunburst',
         bgTheme: item.bg || DEFAULT_CARD.bgTheme
       }));

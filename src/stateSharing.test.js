@@ -15,6 +15,12 @@ const stateWith = (overrides = {}) => ({
 });
 
 describe('stateSharing URL param codec', () => {
+  test('preserves the new blue default and legacy links with omitted orange', () => {
+    expect(decodeStateFromParam(encodeStateToParam(stateWith())).cards[0].burstColor).toBe('blue');
+    expect(decodeStateFromParam('{"v":1,"c":[{"t":"Legacy"}]}').cards[0].burstColor).toBe('orange');
+    expect(decodeStateFromParam(encodeStateToParam(stateWith({ burstColor: 'orange' }))).cards[0].burstColor).toBe('orange');
+  });
+
   test('round-trips a full card without losing fields', () => {
     // Arrange
     const state = stateWith({

@@ -56,7 +56,7 @@ export const DEFAULT_CARD = {
   companySub: '',
   logoType: 'crown',
   customLogoUrl: '',
-  burstColor: 'orange', // 'orange', 'red', 'yellow', 'green', 'blue', 'mono', 'mono-white'
+  burstColor: 'blue', // 'orange', 'red', 'yellow', 'green', 'blue', 'mono', 'mono-white'
   priceShape: 'sunburst', // Solstrålar (Retro Sunburst) by default for all
   bgTheme: 'ice-blue' // 'ice-blue', 'clean-white', 'warm-yellow', 'kraft'
 };
@@ -89,7 +89,7 @@ export const DEMO_PRESET_ITEMS = [
     priceInt: '299',
     priceDec: '00',
     unit: '/kg',
-    burstColor: 'red'
+    burstColor: 'blue'
   },
   {
     ...DEFAULT_CARD,

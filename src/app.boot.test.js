@@ -56,7 +56,7 @@ describe('application boot', () => {
     // Assert
     expect(cardElements()).toHaveLength(1);
     expect(emptySlots()).toHaveLength(7);
-    expect(document.getElementById('a4-sheet').className).toBe('grid-2x4 show-cut-lines sheet-monochrome');
+    expect(document.getElementById('a4-sheet').className).toBe('grid-2x4 show-cut-lines');
     expect(indicator()).toBe('Lapp #1 av 1 (max 8)');
     expect(document.getElementById('input-title').value).toBe('Kalvframdel');
   });
@@ -278,12 +278,14 @@ describe('card management', () => {
 });
 
 describe('mobile experience', () => {
-  test.each([320, 390, 880, 1024])('color choices escape the default B&W override at %ipx', async (width) => {
+  test.each([320, 390, 880, 1024])('starts blue and supports the available color choices at %ipx', async (width) => {
     await bootApp({ width });
     const sheet = document.getElementById('a4-sheet');
-    expect(document.querySelector('.color-chip.active').dataset.color).toBe('mono');
+    expect(document.querySelector('.color-chip.active').dataset.color).toBe('blue');
+    expect(document.querySelector('.color-chip[data-color="red"]')).toBeNull();
+    expect(document.querySelector('.color-chip[data-color="yellow"]')).toBeNull();
 
-    for (const color of ['orange', 'red', 'yellow', 'green', 'blue', 'mono', 'orange']) {
+    for (const color of ['orange', 'green', 'blue', 'mono', 'blue']) {
       document.querySelector(`.color-chip[data-color="${color}"]`).click();
       document.getElementById('tab-btn-preview').click();
       expect(sheet.classList.contains('sheet-monochrome')).toBe(false);
@@ -297,7 +299,7 @@ describe('mobile experience', () => {
     const sharedUrl = window.location.search;
     await bootApp({ width, url: sharedUrl });
     expect(document.getElementById('a4-sheet').classList.contains('sheet-monochrome')).toBe(false);
-    expect(document.querySelector('.color-chip.active').dataset.color).toBe('orange');
+    expect(document.querySelector('.color-chip.active').dataset.color).toBe('blue');
   });
 
   test('clears a saved sheet override, refreshes every card, and restores color after reload', async () => {
@@ -306,13 +308,13 @@ describe('mobile experience', () => {
       globalMonochrome: true,
       cards: [{ ...DEFAULT_CARD, bgTheme: 'monochrome' }, { ...DEFAULT_CARD, id: 2, burstColor: 'blue' }]
     } });
-    document.querySelector('.color-chip[data-color="red"]').click();
+    document.querySelector('.color-chip[data-color="green"]').click();
     expect(document.querySelectorAll('.is-monochrome')).toHaveLength(0);
     const savedState = JSON.parse(localStorage.getItem('butcher_cards_state'));
     expect(savedState.cards[0].bgTheme).toBe('ice-blue');
     await bootApp({ width: 390, savedState });
     expect(document.querySelectorAll('.is-monochrome')).toHaveLength(0);
-    expect(document.querySelector('.color-chip.active').dataset.color).toBe('red');
+    expect(document.querySelector('.color-chip.active').dataset.color).toBe('green');
   });
 
   test('boots into the editor view on a 320px screen', async () => {
