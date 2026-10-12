@@ -484,8 +484,11 @@ function syncFormFromActiveCard() {
   selectPriceShape.value = card.priceShape || 'sunburst';
 
   // Burst color
+  const effectiveColor = state.globalMonochrome || card.bgTheme === 'monochrome'
+    ? (card.burstColor === 'mono-white' ? 'mono-white' : 'mono')
+    : (card.burstColor || 'orange');
   burstColorOptions.querySelectorAll('.color-chip').forEach(chip => {
-    if (chip.getAttribute('data-color') === (card.burstColor || 'orange')) {
+    if (chip.getAttribute('data-color') === effectiveColor) {
       chip.classList.add('active');
     } else {
       chip.classList.remove('active');
@@ -572,9 +575,18 @@ function setupEventListeners() {
   // Burst color options
   burstColorOptions.querySelectorAll('.color-chip').forEach(chip => {
     chip.addEventListener('click', () => {
-      burstColorOptions.querySelectorAll('.color-chip').forEach(c => c.classList.remove('active'));
-      chip.classList.add('active');
-      updateActiveCard({ burstColor: chip.getAttribute('data-color') });
+      const burstColor = chip.getAttribute('data-color');
+      const hadGlobalMonochrome = state.globalMonochrome;
+      // The color chips replace the removed sheet-wide monochrome controls.
+      // An explicit choice must override B&W defaults and saved/shared settings.
+      state.globalMonochrome = false;
+      const changes = { burstColor };
+      if (state.cards[state.activeCardIndex].bgTheme === 'monochrome') {
+        changes.bgTheme = DEFAULT_CARD.bgTheme;
+      }
+      updateActiveCard(changes);
+      if (hadGlobalMonochrome) renderSheet();
+      syncFormFromActiveCard();
     });
   });
 
@@ -938,4 +950,3 @@ function main() {
 
 // Start app
 window.addEventListener('DOMContentLoaded', main);
-

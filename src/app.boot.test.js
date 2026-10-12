@@ -17,10 +17,15 @@ window.addEventListener = (type, listener, ...rest) => {
   return originalAddEventListener(type, listener, ...rest);
 };
 
-async function bootApp({ width = 1024, url = '/' } = {}) {
+async function bootApp({ width = 1024, url = '/', savedState } = {}) {
   // Arrange
   vi.resetModules();
   localStorage.clear();
+  if (savedState) {
+    localStorage.setItem('butcher_v5_no_halal_company', 'true');
+    localStorage.setItem('prislappar_v7_22pt_sunburst', 'true');
+    localStorage.setItem('butcher_cards_state', JSON.stringify(savedState));
+  }
   history.replaceState(null, '', url); // drop or restore shared state
   while (domContentLoadedListeners.length) {
     window.removeEventListener('DOMContentLoaded', domContentLoadedListeners.pop());
@@ -273,6 +278,43 @@ describe('card management', () => {
 });
 
 describe('mobile experience', () => {
+  test.each([320, 390, 880, 1024])('color choices escape the default B&W override at %ipx', async (width) => {
+    await bootApp({ width });
+    const sheet = document.getElementById('a4-sheet');
+    expect(document.querySelector('.color-chip.active').dataset.color).toBe('mono');
+
+    for (const color of ['orange', 'red', 'yellow', 'green', 'blue', 'mono', 'orange']) {
+      document.querySelector(`.color-chip[data-color="${color}"]`).click();
+      document.getElementById('tab-btn-preview').click();
+      expect(sheet.classList.contains('sheet-monochrome')).toBe(false);
+      expect(document.getElementById('card-item-0').classList.contains('is-monochrome')).toBe(color === 'mono');
+      expect(sheet.querySelector('.price-display').classList.contains('price-theme-yellow')).toBe(color !== 'mono');
+      expect(document.querySelector('.color-chip.active').dataset.color).toBe(color);
+      expect(JSON.parse(localStorage.getItem('butcher_cards_state')).globalMonochrome).toBe(false);
+      document.getElementById('tab-btn-editor').click();
+    }
+
+    const sharedUrl = window.location.search;
+    await bootApp({ width, url: sharedUrl });
+    expect(document.getElementById('a4-sheet').classList.contains('sheet-monochrome')).toBe(false);
+    expect(document.querySelector('.color-chip.active').dataset.color).toBe('orange');
+  });
+
+  test('clears a saved sheet override, refreshes every card, and restores color after reload', async () => {
+    const { DEFAULT_CARD } = await import('./presets.js');
+    await bootApp({ width: 390, savedState: {
+      globalMonochrome: true,
+      cards: [{ ...DEFAULT_CARD, bgTheme: 'monochrome' }, { ...DEFAULT_CARD, id: 2, burstColor: 'blue' }]
+    } });
+    document.querySelector('.color-chip[data-color="red"]').click();
+    expect(document.querySelectorAll('.is-monochrome')).toHaveLength(0);
+    const savedState = JSON.parse(localStorage.getItem('butcher_cards_state'));
+    expect(savedState.cards[0].bgTheme).toBe('ice-blue');
+    await bootApp({ width: 390, savedState });
+    expect(document.querySelectorAll('.is-monochrome')).toHaveLength(0);
+    expect(document.querySelector('.color-chip.active').dataset.color).toBe('red');
+  });
+
   test('boots into the editor view on a 320px screen', async () => {
     // Arrange & Act
     await bootApp({ width: 320 });
@@ -353,7 +395,7 @@ describe('settings & language', () => {
     document.querySelector('.color-chip.chip-mono').click();
 
     // Assert
-    expect(sheet.className).toContain('sheet-monochrome');
+    expect(sheet.className).not.toContain('sheet-monochrome');
     expect(document.querySelector('#card-item-0').className).toContain('is-monochrome');
     expect(document.querySelector('#card-item-0 .price-display').className).toContain('price-theme-white-on-black');
   });
