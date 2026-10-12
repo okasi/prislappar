@@ -1,4 +1,4 @@
-import { fitPriceArtwork } from './priceLayout.js?v=20261012-blue-default';
+import { fitPriceArtwork } from './priceLayout.js?v=20261012-safari-price-fit';
 import { COUNTRIES, DEFAULT_BRANDING, GRID_CONFIGS, DEMO_PRESET_ITEMS, DEFAULT_CARD, normalizeTitleSize, normalizePriceSize } from './presets.js?v=20261012-blue-default';
 import { renderCardHtml } from './cardRenderer.js?v=20261012-blue-default';
 import { getI18n } from './i18n.js?v=20261012-blue-default';

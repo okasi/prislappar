@@ -1,22 +1,22 @@
 // Include the SVG's actual painted geometry: sunburst rays extend past its viewBox.
 function artworkBounds(card) {
   const svg = card.querySelector('.starburst-graphic');
-  const matrix = svg.getScreenCTM();
+  const viewport = svg.getBoundingClientRect();
+  const viewBox = svg.viewBox.baseVal;
   const box = svg.getBBox();
-  if (!matrix || !box.width || !box.height) return null;
-  const corners = [
-    [box.x, box.y], [box.x + box.width, box.y],
-    [box.x, box.y + box.height], [box.x + box.width, box.y + box.height]
-  ].map(([x, y]) => ({
-    x: matrix.a * x + matrix.c * y + matrix.e,
-    y: matrix.b * x + matrix.d * y + matrix.f
-  }));
+  if (!viewport.width || !viewport.height || !viewBox.width || !viewBox.height || !box.width || !box.height) return null;
+  // All badge SVGs use xMidYMid meet and their ancestors only scale/translate.
+  // Safari's getScreenCTM can omit ancestor CSS scaling. Use the rendered
+  // viewport to keep SVG geometry and price text in the same coordinate space.
+  const scale = Math.min(viewport.width / viewBox.width, viewport.height / viewBox.height);
+  const left = viewport.left + (viewport.width - viewBox.width * scale) / 2;
+  const top = viewport.top + (viewport.height - viewBox.height * scale) / 2;
   const price = card.querySelector('.price-display').getBoundingClientRect();
   return {
-    left: Math.min(price.left, ...corners.map(p => p.x)),
-    right: Math.max(price.right, ...corners.map(p => p.x)),
-    top: Math.min(price.top, ...corners.map(p => p.y)),
-    bottom: Math.max(price.bottom, ...corners.map(p => p.y))
+    left: Math.min(price.left, left + (box.x - viewBox.x) * scale),
+    right: Math.max(price.right, left + (box.x + box.width - viewBox.x) * scale),
+    top: Math.min(price.top, top + (box.y - viewBox.y) * scale),
+    bottom: Math.max(price.bottom, top + (box.y + box.height - viewBox.y) * scale)
   };
 }
 
@@ -41,6 +41,7 @@ export function fitPriceArtwork(card) {
   badge.style.setProperty('--price-fit-scale', fit);
   const fitted = artworkBounds(card);
   const units = inner.getBoundingClientRect().width / inner.offsetWidth;
+  if (!fitted || !Number.isFinite(units) || units <= 0) return;
   const shiftX = Math.min(Math.max(0, bounds.left + padding - fitted.left),
     bounds.right - padding - fitted.right);
   const shiftY = Math.min(Math.max(0, bounds.top + padding - fitted.top),

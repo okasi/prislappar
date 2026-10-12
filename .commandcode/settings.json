@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Shell(git:*)",
+      "Shell(node --check src/main.js)",
+      "Shell(node --check src/cardRenderer.js)",
+      "Shell(git add src/cardRenderer.js src/style.css && git commit -F - <<'EOF' Revert halal stamp to previous design Co-authored-by: CommandCodeBot <noreply@commandcode.ai> EOF)",
+      "Shell(git add index.html src/main.js && git commit -F - <<'EOF' Remove Svartvit toolbar toggle and Vit chip, default price B&W Co-authored-by: CommandCodeBot <noreply@commandcode.ai> EOF)",
+      "Shell(git add src/main.js && git commit -F - <<'EOF' Sync locale change to URL query param Co-authored-by: CommandCodeBot <noreply@commandcode.ai> EOF git push origin main)"
+    ],
+    "deny": [],
+    "defaultMode": "default"
+  }
+}
